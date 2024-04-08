@@ -20,18 +20,6 @@ class DrawerNavigationController extends GetxController {
     scaffoldKey.currentState?.openDrawer();
   }
 
-  // 控制抽屉导航是否打开的状态
-  // RxBool isDrawerOpen = false.obs;
-  // 切换抽屉导航的状态
-  // void toggleDrawer() {
-  //   isDrawerOpen.value = !isDrawerOpen.value; // 切换值
-  //   if (isDrawerOpen.value) {
-  //     scaffoldKey.currentState?.openDrawer();
-  //   } else {
-  //     scaffoldKey.currentState?.openEndDrawer();
-  //   }
-  // }
-
   // 定义当前选中的导航栏项目，初始值为首页
   var selectedNavItem = DrawerViews.home.obs;
 

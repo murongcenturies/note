@@ -9,13 +9,13 @@ class GridNotes extends StatelessWidget {
   // 笔记列表
   final List<Note> notes;
   // 是否显示可滑动删除 (默认为否)
-  final bool isShowDismisse;
+  final bool isShowDismiss;
 
   const GridNotes({
-    Key? key,
+    super.key,
     required this.notes,
-    this.isShowDismisse = false,
-  }) : super(key: key);
+    this.isShowDismiss = false,
+  });
 
 @override
 Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ Widget build(BuildContext context) {
           // 传递当前笔记信息
           itemNote: itemNote,
           // 是否显示可滑动删除
-          isShowDismisse: isShowDismisse,
+          isShowDismiss: isShowDismiss,
         );
       },
     );

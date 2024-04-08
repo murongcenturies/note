@@ -8,6 +8,6 @@ abstract class AppFunction {
 //  刷新笔记 (根据抽屉部分加载)
   static Future<void> onRefresh(BuildContext context) async {
     // 调用 NoteController 的刷新笔记方法
-    Get.find<NoteController>().refreshNotes();
+    Get.find<NoteController>(tag: 'home').refreshNotes();
   }
 }

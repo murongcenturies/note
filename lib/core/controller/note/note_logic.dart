@@ -66,14 +66,14 @@ class NoteController extends GetxController {
         _mapFailureMsg(failure),
         DrawerSelect.drawerSection,
       ),
-      (_) => SuccessState('ADD_SUCCESS_MSG'),
+      (_) => SuccessState(ADD_SUCCESS_MSG),
     );
   }
 
   // 处理空输入事件的方法
   void handleEmptyInputs() {
     // 更新状态为EmptyInputsState，并提供提示信息
-    noteState.value = EmptyInputsState('EMPTY_TEXT_MSG');
+    noteState.value = EmptyInputsState(EMPTY_TEXT_MSG);
   }
 
   // 处理获取笔记详情事件的方法
@@ -112,8 +112,9 @@ class NoteController extends GetxController {
         _mapFailureMsg(failure),
         DrawerSelect.drawerSection,
       ),
-      (_) => SuccessState('UPDATE_SUCCESS_MSG'),
+      (_) => SuccessState(UPDATE_SUCCESS_MSG),
     );
+    print(noteState.value);
   }
 
   // 处理删除笔记事件的方法
@@ -129,7 +130,7 @@ class NoteController extends GetxController {
         _mapFailureMsg(failure),
         DrawerSelect.drawerSection,
       ),
-      (_) => SuccessState('DELETE_SUCCESS_MSG'),
+      (_) => SuccessState(DELETE_SUCCESS_MSG),
     );
   }
 
@@ -146,7 +147,7 @@ class NoteController extends GetxController {
 
     if (_isNewNote && isNoteEmpty) {
       // 新建笔记为空，则更新状态为EmptyInputsState，并提供提示信息
-      noteState.value = EmptyInputsState('EMPTY_TEXT_MSG');
+      noteState.value = EmptyInputsState(EMPTY_TEXT_MSG);
     } else if (_isNewNote || (!_isNewNote && isDirty)) {
       // 笔记已修改，需要更新
       if (_isNewNote) {
@@ -166,11 +167,14 @@ class NoteController extends GetxController {
 
     if (!existsNote) {
       // 笔记不存在，则更新状态为EmptyInputsState，并提供提示信息
-      noteState.value = EmptyInputsState('EMPTY_TEXT_MSG');
+      noteState.value = EmptyInputsState(EMPTY_TEXT_MSG);
       // 通知关闭详情页面
       // noteState.value = GoPopNoteState();
       return;
     }
+
+    // 存储旧的笔记对象
+    oldNote = note;
 
     // 内部方法，用于更新笔记并根据结果更新状态
     Future<NoteState> updateNoteAndEmit({
@@ -186,6 +190,12 @@ class NoteController extends GetxController {
       // 调用用例类更新笔记，并获取结果
       final failureOrSuccess = await updateNote(updatedNote);
 
+      if (failureOrSuccess == null) {
+        // Handle the null case
+        return ErrorState('Unexpected Error , Please try again later .',
+            DrawerSelect.drawerSection);
+            // print('333');
+      }
       // 根据结果更新并返回要更新的状态
       return failureOrSuccess.fold(
         (failure) => ErrorState(
@@ -197,36 +207,40 @@ class NoteController extends GetxController {
       );
     }
 
+    Future<NoteState>? newState;
+
     // 根据新的笔记状态进行不同的处理
     switch (newStatus) {
       case StatusNote.archived: //  archive 状态
-        noteState.value = await updateNoteAndEmit(
+        newState = updateNoteAndEmit(
           statusNote: newStatus,
           successState: ToggleSuccessState(
             // 更新切换成功状态
             note.stateNote == StatusNote.pinned // 判断是否取消置顶
-                ? 'NOTE_ARCHIVE_WITH_UNPINNED_MSG' // 提示已归档并且取消置顶
-                : 'NOTE_ARCHIVE_MSG', // 提示已归档
+                ? NOTE_ARCHIVE_WITH_UNPINNED_MSG // 提示已归档并且取消置顶
+                : NOTE_ARCHIVE_MSG, // 提示已归档
           ),
         );
         break;
       case StatusNote.undefined: // 未定义状态
-        noteState.value = await updateNoteAndEmit(
+        newState = updateNoteAndEmit(
           statusNote: newStatus,
-          successState: ToggleSuccessState('NOTE_UNARCHIVED_MSG'), // 更新取消归档成功状态
+          successState: ToggleSuccessState(NOTE_UNARCHIVED_MSG), // 更新取消归档成功状态
         );
         break;
       case StatusNote.trash: // 垃圾桶状态
-        noteState.value = await updateNoteAndEmit(
+        newState = updateNoteAndEmit(
           statusNote: newStatus,
           successState:
-              ToggleSuccessState('MOVE_NOTE_TRASH_MSG'), // 更新移动到垃圾桶成功状态
+              ToggleSuccessState(MOVE_NOTE_TRASH_MSG), // 更新移动到垃圾桶成功状态
         );
         break;
       case StatusNote.pinned: // 置顶状态
         // 不需要处理
         break;
     }
+
+    noteState.value = await newState!;
 
     // 通知关闭详情页面
     // noteState.value = GoPopNoteState();
@@ -310,9 +324,9 @@ class NoteController extends GetxController {
     // 根据错误类型，返回不同的错误信息
     switch (failure.runtimeType) {
       case const (DatabaseFailure): // 数据库错误
-        return 'DATABASE_FAILURE_MSG'; // 数据库错误提示
+        return DATABASE_FAILURE_MSG; // 数据库错误提示
       case const (NoDataFailure): // 无数据错误
-        return 'NO_DATA_FAILURE_MSG'; // 无数据错误提示
+        return NO_DATA_FAILURE_MSG; // 无数据错误提示
       default: // 未知错误
         return 'Unexpected Error , Please try again later .'; // 通用错误提示 未知错误，请稍后再试。
     }

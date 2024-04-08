@@ -18,7 +18,7 @@ class NoteHiveAdapter extends TypeAdapter<NoteHive> {
     };
     return NoteHive(
       id: fields[0] as String,
-      content: fields[1] as String,
+      content: fields[1] as Delta,
       modifiedTime: fields[2] as DateTime,
       stateNoteHive: fields[3] as StateNoteHive,
     );

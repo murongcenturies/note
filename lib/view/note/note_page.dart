@@ -2,6 +2,7 @@
 import 'dart:ui';
 import 'dart:convert' show jsonEncode;
 
+// import 'package:flutter_quill/quill_delta.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:pdf/pdf.dart';
@@ -23,68 +24,83 @@ import './widgets/widgets.dart';
 import 'package:note/core/core.dart';
 
 class NotePage extends StatefulWidget {
-
   const NotePage({
     super.key,
     required this.note, // 要展示的笔记信息
   });
 
-    
   final Note note; // 笔记数据
   @override
   State<NotePage> createState() => NotePageState();
 }
 
-
 class NotePageState extends State<NotePage> {
-
   late QuillController _controller;
   late FocusNode _focusNode;
   final NoteController noteController = Get.find<NoteController>(tag: 'home');
-
 
   @override
   void initState() {
     super.initState();
     _controller = QuillController.basic();
     _focusNode = FocusNode();
+    _loadNoteFields();
   }
 
   // 获取原始笔记数据（未修改的）
-Note get originNote {
-  return Note(
-    id: widget.note.id,
-    content: widget.note.content,
-    modifiedTime: widget.note.modifiedTime,
-    stateNote: widget.note.stateNote,
-  );
-}
+  Note get originNote {
+    return Note(
+      id: widget.note.id,
+      content: widget.note.content,
+      modifiedTime: widget.note.modifiedTime,
+      stateNote: widget.note.stateNote,
+    );
+  }
 
 // 获取当前笔记数据（可能被修改过的）
-Note get currentNote {
+  Note get currentNote {
+    final StatusIconsController noteStatusBloc =
+        Get.find<StatusIconsController>();
 
-  final StatusIconsController noteStatusBloc = Get.find<StatusIconsController>();
+    // 获取当前笔记状态（来自图标状态管理器）
+    final StatusNote currentStatusNote =
+        noteStatusBloc is ToggleIconsStatusState
+            ? (noteStatusBloc as ToggleIconsStatusState).currentNoteStatus
+            : StatusNote.undefined; // 默认状态为“垃圾箱”
 
-  // 获取当前笔记状态（来自图标状态管理器）
-  final StatusNote currentStatusNote =
-      noteStatusBloc is ToggleIconsStatusState
-          ? (noteStatusBloc as ToggleIconsStatusState).currentNoteStatus
-          : StatusNote.undefined; // 默认状态为“垃圾箱”
+    // 构建当前笔记对象，包含id、内容，状态等信息
+    return Note(
+      id: widget.note.id,
+      // content: jsonEncode(_controller.document.toDelta().toJson()),
+      content: _controller.document.toDelta(),
+      modifiedTime: widget.note.modifiedTime,
+      stateNote: currentStatusNote, // 使用获取到的笔记状态
+    );
+  }
 
-  // 构建当前笔记对象，包含标题、内容、颜色、状态等信息
-  return Note(
-    id: widget.note.id,
-    content: jsonEncode(_controller.document.toDelta().toJson()),
-    modifiedTime: widget.note.modifiedTime,
-    // 使用bloc中的最新颜色
-    stateNote: currentStatusNote, // 使用获取到的笔记状态
-  );
-}
-// // 加载笔记内容到输入框
-//   void _loadNoteFields() {
-//     _controller.document= widget.note.content;
-//   }
+// 加载笔记内容到输入框
+  void _loadNoteFields() {
+    if (widget.note.content.isNotEmpty) {
+      try {
+        //从widget.note对象中获取content属性，并将其存储在contentDelta变量中
+        final contentDelta = widget.note.content;
+  
+        //将contentDelta的内容加载到文本编辑器中
+        // _controller.compose(contentDelta,
+        //     const TextSelection.collapsed(offset: 0), ChangeSource.local);
+        _controller.document = Document.fromDelta(contentDelta);
+        //获取文本编辑器中的内容长度
+        final contentLength = _controller.document.length;
 
+        //更新文本编辑器中的选择内容
+        _controller.updateSelection(
+            TextSelection.collapsed(offset: contentLength), ChangeSource.local);
+      } catch (e) {
+        // 处理错误
+        // print('加载笔记内容失败: $e');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -119,12 +135,11 @@ Note get currentNote {
               iconTheme:
                   IconThemeData(color: Theme.of(context).iconTheme.color),
               leading: IconButton.outlined(
-                
                 icon: AppIcons.home, // 使用home图标
                 onPressed: () async {
                   // await saveDocumentToJson();
                   noteController.popNoteAction(currentNote, originNote);
-                  print(currentNote);
+                  // print(currentNote);
                   // 返回主页
                   if (Get.currentRoute == AppRouterName.home.path) {
                     Get.back();
@@ -206,6 +221,23 @@ Note get currentNote {
                     );
                   },
                   icon: AppIcons.print,
+                  color: Theme.of(context).iconTheme.color,
+                ),
+                //移动当前文档到垃圾箱
+                IconButton(
+                  tooltip: 'Move to Trash',
+                  onPressed: () {
+                    print(currentNote);
+                    noteController.moveNote(currentNote, StatusNote.trash);
+                    //返回主页
+                    if (Get.currentRoute == AppRouterName.home.path) {
+                      Get.back();
+                    } else {
+                      Get.offNamedUntil(
+                          AppRouterName.home.path, (route) => false);
+                    }
+                  },
+                  icon: AppIcons.trash,
                   color: Theme.of(context).iconTheme.color,
                 ),
                 // const HomeScreenButton(),

@@ -36,9 +36,9 @@ class SliverNotes extends StatelessWidget {
   _appBar(BuildContext context) {
     // 使用 SliverPadding 调整 AppBar 位置
     // Padding.fromLTRB: 设置左、上、右、下内边距
-    return SliverPadding(
+    return const SliverPadding(
       // 顶部内边距 (避免顶端搜索栏和其他组件重叠)
-      padding: const EdgeInsets.only(top: 15),
+      padding: EdgeInsets.only(top: 15),
       // padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
       sliver: SliverAppBar(
         // 浮动 AppBar

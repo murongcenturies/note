@@ -1,4 +1,5 @@
 // 引入 Hive 库用于本地存储
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:hive/hive.dart';
 
 // 引入笔记状态枚举类 (state_note_hive.dart)
@@ -17,7 +18,7 @@ class NoteHive extends HiveObject {
 
   // 笔记内容 (HiveField 1)
   @HiveField(1)
-  final String content;
+  final Delta content;
 
   // 笔记修改时间 (HiveField 4)
   @HiveField(2)

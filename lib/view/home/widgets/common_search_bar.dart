@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:note/core/core.dart';
+import '../../search/notes_searching.dart';
 import 'widgets.dart';
 // 通用搜索栏组件
 class CommonSearchBar extends StatelessWidget {
-   CommonSearchBar({super.key});
+   const CommonSearchBar({super.key});
 
-  final DrawerNavigationController drawerController = Get.find();
   // 搜索提示文本
   final String hintText = 'Search your notes';
   // 打开侧边栏方法
   void _openDrawer(BuildContext context) {
-    drawerController.openDrawer();
+    Scaffold.of(context).openDrawer();
   }
 
   @override
   Widget build(BuildContext context) {
-    final HomeController homeController = Get.find();
-
     // 搜索栏内边距
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -30,8 +28,7 @@ class CommonSearchBar extends StatelessWidget {
           child: InkWell(
             // 点击效果 (圆角样式)
             borderRadius: BorderRadius.circular(25),
-            onTap: homeController.toggleSearch, // 调用 HomeController 的 toggleSearch 方法
-            // onTap: () => _showSearch(context), // 点击搜索
+            onTap: () => _showSearch(context), // 点击搜索
             child: Row(
               // 子元素水平对齐 (左右两端对齐)
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,6 +64,6 @@ class CommonSearchBar extends StatelessWidget {
 
 
   // 显示搜索界面方法
-  // Future _showSearch(BuildContext context) =>;
-      // showSearch(context: context, delegate: NotesSearching());
+  Future _showSearch(BuildContext context) =>
+      showSearch(context: context, delegate: NotesSearching());
 }

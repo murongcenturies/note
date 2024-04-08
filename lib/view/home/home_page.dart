@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-// import 'package:path_provider/path_provider.dart';
+import 'package:flutter/scheduler.dart';
 import 'widgets/widgets.dart';
 import 'package:note/core/core.dart';
 import 'package:note/view/views.dart';
 import 'package:get/get.dart';
 
+  final DrawerNavigationController drawerController =
+      Get.put(DrawerNavigationController());
 // 主页 (显示所有笔记列表)
 class HomePage extends StatelessWidget {
   // HomePage({super.key});
 
-  final DrawerNavigationController drawerController =
-      Get.put(DrawerNavigationController());
   final HomeController homeController = Get.put(HomeController());
   final StatusIconsController noteStatue = Get.put(StatusIconsController());
-  // final selectedView = drawerController.convertToDrawerSectionView(DrawerSelect.defaultDrawerView);
   late final NoteController _controller;
   HomePage({super.key}) {
     // 获取当前选中的视图
@@ -27,10 +26,9 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final state = Get.find<NoteController>().noteState;
     return Scaffold(
       // 关联 GlobalKey<ScaffoldState> 对象
-      key: drawerController.scaffoldKey,
+      // key: drawerController.scaffoldKey,
       //自定义windows_bar
       appBar: const CustomAppBar(title: 'sparkler'),
       // 抽屉导航
@@ -55,14 +53,12 @@ class HomePage extends StatelessWidget {
           Obx(() {
             final state = _controller.noteState.value;
             displayNotesMsg(state);
-                 
             // print(state);
             if (state is LoadingState) {
               print(state);
               return CommonLoadingNotes(state.drawerSectionView);
             } else if (state is EmptyNoteState) {
               // print(state.drawerSectionView);
-              // return const CommonEmptyNotes(DrawerSectionView.home);
               return CommonEmptyNotes(state.drawerSectionView);
             } else if (state is ErrorState) {
               // print(state);
@@ -88,11 +84,14 @@ class HomePage extends StatelessWidget {
   void displayNotesMsg(state) {
     if (state is SuccessState) {
       // 刷新笔记列表并显示成功信息
-      // _controller.refreshNotes(DrawerSelect.drawerSection);
-      // AppAlerts.displaySnackbarMsg(Get.context, _controller.noteState.value.message);
+      _controller.refreshNotes();
+      print(state.message);
+        SchedulerBinding.instance!.addPostFrameCallback((_) {
+    AppAlerts.displaySnackbarMsg(Get.context!, state.message);
+  });
     } else if (state is ToggleSuccessState) {
       // 显示可撤销操作的 Snackbar
-      // AppAlerts.displaySnackarUndoMove(Get.context, _controller.noteState.value.message);
+      AppAlerts.displaySnackarUndoMove(Get.context!,state.message);
     } else if (state is EmptyInputsState) {
       // 显示空输入提示信息
       // AppAlerts.displaySnackbarMsg(Get.context, _controller.noteState.value.message);
@@ -102,7 +101,6 @@ class HomePage extends StatelessWidget {
     // refreshNotes(DrawerSelect.drawerSection);
     // }
     else if (state is GetNoteByIdState) {
-      print('object');
       print(state.note);
       // 处理获取单个笔记信息的逻辑
       _getNoteByIdState(state.note);
@@ -120,10 +118,12 @@ class HomePage extends StatelessWidget {
     // Get.toNamed(AppRouterName.note.path, arguments: note);
     _navigateToNoteDetail(note);
   }
-void _navigateToNoteDetail(Note note) async {
-  await Future.delayed(Duration.zero);
-  Get.toNamed(AppRouterName.note.path, arguments: note);
-}
+
+  void _navigateToNoteDetail(Note note) async {
+    await Future.delayed(Duration.zero);
+    Get.toNamed(AppRouterName.note.path, arguments: note);
+  }
+
   // 构建浮动操作按钮
   Widget _buildFloatingActionButton(BuildContext context) {
     return FloatingActionButton(

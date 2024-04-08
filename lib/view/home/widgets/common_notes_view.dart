@@ -7,11 +7,11 @@ import 'package:note/view/home/widgets/header_text.dart';
 class CommonNotesView extends StatelessWidget {
   // 构造函数
   const CommonNotesView({
-    Key? key,
+    super.key,
     required this.drawerSection, // 笔记部分 (首页、归档、回收站)
     required this.otherNotes,   // 其他笔记列表
     required this.pinnedNotes,  // 已固定笔记列表
-  }) : super(key: key);
+  });
 
   // 属性
   final DrawerSectionView drawerSection;
@@ -42,13 +42,13 @@ class CommonNotesView extends StatelessWidget {
               : const SliverToBoxAdapter(), // 空占位符
 
           // 以网格形式显示已固定笔记，并允许滑动删除
-          GridNotes(notes: pinnedNotes, isShowDismisse: true),
+          GridNotes(notes: pinnedNotes, isShowDismiss: true),
 
           // 显示 "其他" 标题
           const HeaderText(text: 'Other'),
 
           // 以网格形式显示其他笔记，并允许滑动删除
-          GridNotes(notes: otherNotes, isShowDismisse: true),
+          GridNotes(notes: otherNotes, isShowDismiss: true),
 
           // 底部留出 120 像素的空间
           const SliverToBoxAdapter(child: SizedBox(height: 120)),
@@ -59,7 +59,7 @@ class CommonNotesView extends StatelessWidget {
       // 归档和回收站：只显示笔记列表
         return [
           // 以网格形式显示笔记，不显示滑动删除
-          GridNotes(notes: otherNotes, isShowDismisse: false),
+          GridNotes(notes: otherNotes, isShowDismiss: false),
         ];
     }
   }

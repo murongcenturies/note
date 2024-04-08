@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_quill/flutter_quill.dart';
 
 import '../../../core/core.dart';
 
@@ -10,6 +11,10 @@ class ItemNoteCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final document = Document.fromJson(note.content.toJson());
+    String plainText = document.toPlainText();
+        // 使用 replaceAll('\n', ' ') 方法移除换行符
+    plainText = plainText.replaceAll('\n', ' ');
     return Padding(
       // 设置垂直方向内边距
       padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -19,10 +24,9 @@ class ItemNoteCard extends StatelessWidget {
           // 设置垂直方向内边距
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: Text(
-            // 截取标题的前 80 个字符，超过的话加上省略号 "..."
-            note.content.length <= 20
-                ? note.content
-                : '${note.content.substring(0, 20)} ...',
+            // 截取标题的前 10 个字符"
+            plainText.length <= 8 ? plainText : plainText.substring(0, 8),
+            //  : '${note.content.substring(0, 20)} ...',
             style: const TextStyle().copyWith(
               // 设置字体加粗
               fontWeight: FontWeight.bold,
@@ -31,13 +35,11 @@ class ItemNoteCard extends StatelessWidget {
         ),
         // 副标题
         subtitle: Text(
-          // 截取内容的前 180 个字符，超过的话加上省略号 "..."
-          note.content.length <= 180
-              ? note.content
-              : '${note.content.substring(0, 180)} ...',
+          // 截取内容的前 15 个字符，超过的话加上省略号 "..."
+          plainText.length  <= 15
+              ? plainText
+              : '${plainText.substring(0, 15)} ...',
         ),
-        // 注释掉原有的 leading 属性 (不显示笔记 ID)
-        // leading: Text(itemNote.id.toString()),
       ),
     );
   }

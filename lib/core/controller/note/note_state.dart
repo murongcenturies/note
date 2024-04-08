@@ -73,7 +73,7 @@ class EmptyInputsState extends MessageState {
 //**其他状态**
 
 // // 返回上层状态 (表示需要关闭笔记详情页面)
-// class GoPopNoteState extends NoteState {}
+class GoPopNoteState extends NoteState {}
 
 // 空笔记状态 (表示当前列表中没有笔记)
 class EmptyNoteState extends NoteState {
