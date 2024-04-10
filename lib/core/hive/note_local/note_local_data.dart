@@ -4,6 +4,7 @@ import 'package:note/core/core.dart';
 import 'package:path_provider/path_provider.dart';
 
 // 引入相关模型和适配器
+import '../emotion_note_hive.dart';
 import '../hive.dart';
 // import 'note_local_data_source.dart';
 // import 'note_model.dart';
@@ -29,6 +30,7 @@ class NoteLocalDataSourceWithHiveImpl implements NoteLocalDataSourse {
       Hive.registerAdapter(NoteHiveAdapter());
       Hive.registerAdapter(StateNoteHiveAdapter());
       Hive.registerAdapter(DeltaAdapter());
+      Hive.registerAdapter(EmotionAdapter());
 
       // 打开指定名称的 Hive 盒子
       await Hive.openBox<NoteHive>(_boxNote);
@@ -56,6 +58,7 @@ class NoteLocalDataSourceWithHiveImpl implements NoteLocalDataSourse {
         content: note.content,
         modifiedTime: note.modifiedTime,
         stateNote: note.stateNoteHive.stateNote,
+        emotion: note.emotionHive.emotion,
       ))
           .toList();
 
@@ -86,6 +89,7 @@ class NoteLocalDataSourceWithHiveImpl implements NoteLocalDataSourse {
         content: resultNote.content,
         modifiedTime: resultNote.modifiedTime,
         stateNote: resultNote.stateNoteHive.stateNote,
+         emotion: resultNote.emotionHive.emotion,
       );
 
       // 捕获异常并抛出无数据异常
@@ -109,6 +113,7 @@ class NoteLocalDataSourceWithHiveImpl implements NoteLocalDataSourse {
         content: noteModel.content,
         modifiedTime: noteModel.modifiedTime,
         stateNoteHive: noteModel.stateNote.stateNoteHive,
+        emotionHive: noteModel.emotion.emotionHive,
       );
       // 将 NoteHive 对象存入 Hive 盒子中，使用 put 方法 (类似于插入)
       await noteBox.put(noteKey, noteHive);
@@ -137,6 +142,7 @@ class NoteLocalDataSourceWithHiveImpl implements NoteLocalDataSourse {
         content: noteModel.content,
         modifiedTime: noteModel.modifiedTime,
         stateNoteHive: noteModel.stateNote.stateNoteHive,
+        emotionHive: noteModel.emotion.emotionHive,
       );
 
       // 将更新后的 NoteHive 对象存入 Hive 盒子中，使用 put 方法 (会覆盖原有数据)

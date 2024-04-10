@@ -50,14 +50,14 @@ class AppAlerts {
 
   // 显示撤销移动笔记的弹窗，并提供撤销操作
   static void displaySnackarUndoMove(BuildContext context, String message) {
-    // _displaySnackBar(
-    //   context,
-    //   message,
-    //   'Undo', // 操作按钮文字
-    //   () => context
-    //       .read<NoteBloc>()
-    //       .add(UndoMoveNote()), // 撤销操作回调 (触发 UndoMoveNote 事件)
-    // );
+    _displaySnackBar(
+      context,
+      message,
+      'Undo', // 操作按钮文字
+      () {
+        Get.find<NoteController>(tag: 'home').undoMoveNote();
+      }
+    );
   }
 
   // 显示回收站弹窗

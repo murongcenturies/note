@@ -33,5 +33,9 @@ class AppRouter {
       name: AppRouterName.archive.path,
       page: () => ArchivePage(),
     ),
+        GetPage(
+      name: AppRouterName.emotion.path,
+      page: () => EmotionPage(),
+    ),
   ];
 }

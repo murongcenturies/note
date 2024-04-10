@@ -56,6 +56,7 @@ class CommonNotesView extends StatelessWidget {
 
       case DrawerSectionView.archive:
       case DrawerSectionView.trash:
+      case DrawerSectionView.emotion:
       // 归档和回收站：只显示笔记列表
         return [
           // 以网格形式显示笔记，不显示滑动删除

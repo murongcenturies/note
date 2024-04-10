@@ -58,6 +58,7 @@ class NoteRepositoriesImpl implements NoteRepositories {
           content: note.content,
           modifiedTime: note.modifiedTime,
           stateNote: note.stateNote,
+          emotion: note.emotion,
         );
         // 使用本地数据源添加笔记
         await noteLocalDataSourse.addNote(convertToNoteModel);
@@ -80,6 +81,7 @@ class NoteRepositoriesImpl implements NoteRepositories {
         content: note.content,
         modifiedTime: note.modifiedTime,
         stateNote: note.stateNote,
+        emotion: note.emotion,
       );
       // 使用本地数据源更新笔记
       await noteLocalDataSourse.updateNote(convertToNoteModel);

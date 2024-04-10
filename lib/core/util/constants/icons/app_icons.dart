@@ -61,6 +61,7 @@ class AppIcons {
   static const emptyNote = Icon(Icons.landscape_outlined, size: 150); // 空笔记
   static const emptyArchivesNote = Icon(Icons.archive_outlined, size: 150); // 空存档笔记
   static const emptyTrashNote = Icon(Icons.delete_outline_rounded, size: 150); // 空回收站笔记
+  static const emptyEmotionNote = Icon(Icons.emoji_emotions_outlined, size: 150); // 空情绪笔记
 
   // 错误状态图标
   static const error = Icon(Icons.error_outline_outlined, size: 150); // 错误

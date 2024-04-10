@@ -15,6 +15,7 @@ class CommonFixScrolling extends StatelessWidget {
   // 子组件 (用于填充可刷新滚动内容)
   final Widget child;
 
+  // ignore: use_super_parameters
   const CommonFixScrolling({
     Key? key,
     required this.onRefresh,
@@ -52,9 +53,9 @@ class CommonFixScrolling extends StatelessWidget {
                     // 将子组件水平居中对齐
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                       Padding(
+                       const Padding(
                         // 顶部内边距 (避免顶端搜索栏和其他组件重叠)
-                        padding: const EdgeInsets.only(top: 15),
+                        padding: EdgeInsets.only(top: 15),
                         child: CommonSearchBar(), // 搜索栏组件
                       ),
                       /// 填充可用空间，并具有固定高度为0的小部件。

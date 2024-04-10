@@ -7,7 +7,7 @@ import 'widgets.dart';
 class CommonLoadingNotes extends StatelessWidget {
   // 笔记部分 (用于判断显示哪个加载中提示)
   final DrawerSectionView noteSection;
-
+  // ignore: use_super_parameters
   const CommonLoadingNotes(
       this.noteSection, {
         Key? key,
@@ -25,7 +25,6 @@ class CommonLoadingNotes extends StatelessWidget {
       ) {
     switch (drawerViewNote) {
       case DrawerSectionView.home:
-      //  print('1');
         return CommonFixScrolling(
           // 刷新回调函数
           onRefresh: () => AppFunction.onRefresh(context),
@@ -34,6 +33,8 @@ class CommonLoadingNotes extends StatelessWidget {
       case DrawerSectionView.archive:
         return const Center(child: CircularProgressIndicator()); // 居中显示圆形进度条
       case DrawerSectionView.trash:
+        return const Center(child: CircularProgressIndicator()); // 居中显示圆形进度条
+      case DrawerSectionView.emotion:
         return const Center(child: CircularProgressIndicator()); // 居中显示圆形进度条
     }
   }

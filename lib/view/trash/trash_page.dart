@@ -82,7 +82,7 @@ class TrashPage extends StatelessWidget {
     if (state is SuccessState) {
       // 刷新笔记列表并显示成功信息
       _controller.refreshNotes();
-      SchedulerBinding.instance!.addPostFrameCallback((_) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
         AppAlerts.displaySnackbarMsg(Get.context!, state.message);
       });
     } else if (state is GoPopNoteState) {

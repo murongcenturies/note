@@ -9,7 +9,8 @@ class CommonEmptyNotes extends StatelessWidget {
   // 抽屉视图笔记 (用于判断显示哪个空数据提示)
   final DrawerSectionView drawerViewNote;
 
-  const CommonEmptyNotes(this.drawerViewNote, {super.key});
+ // ignore: use_super_parameters
+ const CommonEmptyNotes(this.drawerViewNote, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +44,13 @@ class CommonEmptyNotes extends StatelessWidget {
           AppIcons.emptyTrashNote,
           // 提示文本："回收站中没有笔记"
           'No Notes in Recycle Bin',
+        );
+      case DrawerSectionView.emotion:
+          return _emptySection(
+          // 显示 "回收站" 空图标
+          AppIcons.emptyEmotionNote,
+          // 提示文本："这里没有笔记"
+          'No Notes in here',
         );
     }
   }

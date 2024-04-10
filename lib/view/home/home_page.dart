@@ -5,14 +5,15 @@ import 'package:note/core/core.dart';
 import 'package:note/view/views.dart';
 import 'package:get/get.dart';
 
-  final DrawerNavigationController drawerController =
-      Get.put(DrawerNavigationController());
 // 主页 (显示所有笔记列表)
 class HomePage extends StatelessWidget {
   // HomePage({super.key});
 
+  final DrawerNavigationController drawerController =
+      Get.put(DrawerNavigationController());
   final HomeController homeController = Get.put(HomeController());
   final StatusIconsController noteStatue = Get.put(StatusIconsController());
+  final EmotionController emotionController = Get.put(EmotionController());
   late final NoteController _controller;
   HomePage({super.key}) {
     // 获取当前选中的视图
@@ -52,16 +53,11 @@ class HomePage extends StatelessWidget {
           // 根据状态显示不同的组件
           Obx(() {
             final state = _controller.noteState.value;
-            displayNotesMsg(state);
-            // print(state);
             if (state is LoadingState) {
-              print(state);
               return CommonLoadingNotes(state.drawerSectionView);
             } else if (state is EmptyNoteState) {
-              // print(state.drawerSectionView);
               return CommonEmptyNotes(state.drawerSectionView);
             } else if (state is ErrorState) {
-              // print(state);
               return CommonEmptyNotes(state.drawerSectionView);
             } else if (state is NotesViewState) {
               return SliverNotes(
@@ -72,6 +68,7 @@ class HomePage extends StatelessWidget {
                 ),
               );
             }
+            displayNotesMsg(state);
             // 默认返回空占位符
             return const SizedBox.shrink();
           }),
@@ -86,12 +83,15 @@ class HomePage extends StatelessWidget {
       // 刷新笔记列表并显示成功信息
       _controller.refreshNotes();
       print(state.message);
-        SchedulerBinding.instance!.addPostFrameCallback((_) {
-    AppAlerts.displaySnackbarMsg(Get.context!, state.message);
-  });
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        AppAlerts.displaySnackbarMsg(Get.context!, state.message);
+      });
     } else if (state is ToggleSuccessState) {
+      print(state.message);
       // 显示可撤销操作的 Snackbar
-      AppAlerts.displaySnackarUndoMove(Get.context!,state.message);
+       SchedulerBinding.instance.addPostFrameCallback((_) {
+      AppAlerts.displaySnackarUndoMove(Get.context!, state.message);
+        });
     } else if (state is EmptyInputsState) {
       // 显示空输入提示信息
       // AppAlerts.displaySnackbarMsg(Get.context, _controller.noteState.value.message);
@@ -132,18 +132,7 @@ class HomePage extends StatelessWidget {
         child: AppIcons.add,
         // 点击时添加新笔记
         onPressed: () {
-          _controller.getById('');
-
-          // print(_controller.noteState.value);
-
-          // Get.toNamed(AppRouterName.note.path);
+          _controller.getById(''); // 获取空白笔记
         });
   }
-  //   Future<void> _saveNoteAsJson(List<Map<String, dynamic>> content) async {
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   final file = File(
-  //       // '${directory.path}/note_${DateTime.now().millisecondsSinceEpoch}.json');
-  //         '${directory.path}/note_${UUIDGen.generate()}.json');
-  //   await file.writeAsString(jsonEncode(content));
-  // }
 }

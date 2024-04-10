@@ -21,13 +21,14 @@ class NoteHiveAdapter extends TypeAdapter<NoteHive> {
       content: fields[1] as Delta,
       modifiedTime: fields[2] as DateTime,
       stateNoteHive: fields[3] as StateNoteHive,
+      emotionHive: fields[4] as EmotionHive,
     );
   }
 
   @override
   void write(BinaryWriter writer, NoteHive obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -35,7 +36,9 @@ class NoteHiveAdapter extends TypeAdapter<NoteHive> {
       ..writeByte(2)
       ..write(obj.modifiedTime)
       ..writeByte(3)
-      ..write(obj.stateNoteHive);
+      ..write(obj.stateNoteHive)
+      ..writeByte(4)
+      ..write(obj.emotionHive);
   }
 
   @override

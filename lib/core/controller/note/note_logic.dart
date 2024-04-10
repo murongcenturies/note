@@ -81,7 +81,7 @@ class NoteController extends GetxController {
     final GetNoteByIdUsecase getNoteByIdUseCase = Get.find();
     // 调用用例类获取笔记详情，并获取结果
     final failureOrSuccess = await getNoteByIdUseCase(noteId);
-    print(noteId);
+    // print(noteId);
     // 根据结果更新状态
     noteState.value = failureOrSuccess.fold(
       (_) {
@@ -100,7 +100,7 @@ class NoteController extends GetxController {
   }
 
   // 处理更新笔记事件的方法
-  updateNote(Note note) async {
+  void updateNoteAll(Note note) async {
     final UpdateNoteUsecase updateNote = Get.find();
     // 调用用例类更新笔记，并获取结果
     final Either<Failure, Unit> failureOrSuccess = await updateNote(note);
@@ -114,7 +114,8 @@ class NoteController extends GetxController {
       ),
       (_) => SuccessState(UPDATE_SUCCESS_MSG),
     );
-    print(noteState.value);
+    // return noteState.value;
+    // print(noteState.value);
   }
 
   // 处理删除笔记事件的方法
@@ -155,7 +156,7 @@ class NoteController extends GetxController {
         addNote(currentNote);
       } else {
         // 现有笔记，调用更新笔记的方法
-        updateNote(updatedNote);
+        updateNoteAll(updatedNote);
       }
     }
   }
@@ -175,6 +176,7 @@ class NoteController extends GetxController {
 
     // 存储旧的笔记对象
     oldNote = note;
+    print('OLD: $oldNote');
 
     // 内部方法，用于更新笔记并根据结果更新状态
     Future<NoteState> updateNoteAndEmit({
@@ -186,16 +188,9 @@ class NoteController extends GetxController {
         statusNote: statusNote,
         modifiedTime: DateTime.now(),
       );
-
+      final UpdateNoteUsecase updateNote = Get.find();
       // 调用用例类更新笔记，并获取结果
       final failureOrSuccess = await updateNote(updatedNote);
-
-      if (failureOrSuccess == null) {
-        // Handle the null case
-        return ErrorState('Unexpected Error , Please try again later .',
-            DrawerSelect.drawerSection);
-            // print('333');
-      }
       // 根据结果更新并返回要更新的状态
       return failureOrSuccess.fold(
         (failure) => ErrorState(
@@ -231,8 +226,7 @@ class NoteController extends GetxController {
       case StatusNote.trash: // 垃圾桶状态
         newState = updateNoteAndEmit(
           statusNote: newStatus,
-          successState:
-              ToggleSuccessState(MOVE_NOTE_TRASH_MSG), // 更新移动到垃圾桶成功状态
+          successState: ToggleSuccessState(MOVE_NOTE_TRASH_MSG), // 更新移动到垃圾桶成功状态
         );
         break;
       case StatusNote.pinned: // 置顶状态
@@ -247,9 +241,11 @@ class NoteController extends GetxController {
   }
 
   // 处理撤销移动笔记事件的方法
-  void undoMoveNote(Note oldNote) async {
+  void undoMoveNote() async {
     // 调用用例类更新笔记 (还原旧的笔记)
-    await updateNote(oldNote);
+    print('OLDer: $oldNote');
+    final UpdateNoteUsecase updateNote = Get.find();
+    await updateNote(oldNote!);
     // 更新返回上层状态
     // noteState.value = GoPopNoteState();
   }
@@ -282,12 +278,21 @@ class NoteController extends GetxController {
         final archiveNotes =
             filterNotesByState(notes, StatusNote.archived); // 归档笔记
         final trashNotes = filterNotesByState(notes, StatusNote.trash); // 垃圾桶笔记
+        // 根据情绪过滤笔记，不返回状态为垃圾桶的笔记
+        List<Note> filterNotesByEmotionState(List<Note> notes) {
+          return notes
+              .where((note) => note.stateNote != StatusNote.trash)
+              .toList();
+        }
+
+        final emotionNotes = filterNotesByEmotionState(notes); // 情绪笔记
 
         // 检查是否有对应状态的笔记
         bool hasPinnedNotes = pinnedNotes.isNotEmpty;
         bool hasUndefinedNotes = undefinedNotes.isNotEmpty;
         bool hasArchiveNotes = archiveNotes.isNotEmpty;
         bool hasTrashNotes = trashNotes.isNotEmpty;
+        bool hasEmotionNotes = emotionNotes.isNotEmpty;
 
         // 根据抽屉视图类型，返回不同的状态
         switch (drawerSectionView) {
@@ -314,6 +319,12 @@ class NoteController extends GetxController {
               return EmptyNoteState(drawerSectionView); // 返回空笔记状态
             }
             return NotesViewState(trashNotes, const []); // 返回包含垃圾桶笔记的状态
+          case DrawerSectionView.emotion:
+            if (notes.isEmpty || (!hasEmotionNotes)) {
+              // 笔记为空或无情绪笔记
+              return EmptyNoteState(drawerSectionView); // 返回空笔记状态
+            }
+            return NotesViewState(emotionNotes, const []); // 返回包含情绪笔记的状态
         }
       },
     );

@@ -1,6 +1,5 @@
 import 'package:get/get.dart';
 import 'package:note/core/core.dart';
-import 'package:flutter/material.dart';
 
 //管理抽屉状态和逻辑
 class DrawerNavigationController extends GetxController {
@@ -12,13 +11,6 @@ class DrawerNavigationController extends GetxController {
     DrawerViews.emotion,
     // DrawerViews.setting,
   ];
-  // 创建一个全局的 GlobalKey<ScaffoldState> 对象
-  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // 打开抽屉导航
-  void openDrawer() {
-    scaffoldKey.currentState?.openDrawer();
-  }
 
   // 定义当前选中的导航栏项目，初始值为首页
   var selectedNavItem = DrawerViews.home.obs;
@@ -62,8 +54,8 @@ class DrawerNavigationController extends GetxController {
       return DrawerSectionView.archive;
     case DrawerViews.trash:
       return DrawerSectionView.trash;
-    // case DrawerViews.emotion:
-    //   return DrawerSectionView.emotion;
+    case DrawerViews.emotion:
+      return DrawerSectionView.emotion;
     default:
       return DrawerSectionView.home; // Default value
   }

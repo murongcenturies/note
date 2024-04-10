@@ -1,6 +1,5 @@
-// import 'dart:io';
 import 'dart:ui';
-import 'dart:convert' show jsonEncode;
+// import 'dart:convert' show jsonEncode;
 
 // import 'package:flutter_quill/quill_delta.dart';
 import 'package:get/get.dart';
@@ -38,6 +37,8 @@ class NotePageState extends State<NotePage> {
   late QuillController _controller;
   late FocusNode _focusNode;
   final NoteController noteController = Get.find<NoteController>(tag: 'home');
+  final StatusIconsController noteStatusBloc =
+      Get.find<StatusIconsController>();
 
   @override
   void initState() {
@@ -54,27 +55,40 @@ class NotePageState extends State<NotePage> {
       content: widget.note.content,
       modifiedTime: widget.note.modifiedTime,
       stateNote: widget.note.stateNote,
+      emotion: widget.note.emotion,
     );
   }
 
-// 获取当前笔记数据（可能被修改过的）
+// 获取当前笔记数据
   Note get currentNote {
-    final StatusIconsController noteStatusBloc =
-        Get.find<StatusIconsController>();
-
+    bool isToggleIconsStatusState =
+        noteStatusBloc.currentIconStatus.value is ToggleIconsStatusState;
+    print('Is ToggleIconsStatusState: $isToggleIconsStatusState');
+    final StatusNote currentStatusNote;
+    if (isToggleIconsStatusState) {
+      currentStatusNote =
+          (noteStatusBloc.currentIconStatus .value as ToggleIconsStatusState).currentNoteStatus;
+      print(noteStatusBloc.currentIconStatus.value.currentNoteStatus);
+    } else {
+      currentStatusNote = StatusNote.undefined;
+    }
+    print('Current Status Note: $currentStatusNote');
     // 获取当前笔记状态（来自图标状态管理器）
-    final StatusNote currentStatusNote =
-        noteStatusBloc is ToggleIconsStatusState
-            ? (noteStatusBloc as ToggleIconsStatusState).currentNoteStatus
-            : StatusNote.undefined; // 默认状态为“垃圾箱”
+    // final StatusNote currentStatusNote =
+    //     noteStatusBloc.currentIconStatus is ToggleIconsStatusState
+    //         ? noteStatusBloc.currentIconStatus.value.currentNoteStatus
+    //         : StatusNote.pinned;
+
+    final EmotionController emotionController = Get.find<EmotionController>();
+    final Emotion currentEmotion = emotionController.currentEmotion;
 
     // 构建当前笔记对象，包含id、内容，状态等信息
     return Note(
       id: widget.note.id,
-      // content: jsonEncode(_controller.document.toDelta().toJson()),
       content: _controller.document.toDelta(),
       modifiedTime: widget.note.modifiedTime,
       stateNote: currentStatusNote, // 使用获取到的笔记状态
+      emotion: currentEmotion,
     );
   }
 
@@ -84,7 +98,7 @@ class NotePageState extends State<NotePage> {
       try {
         //从widget.note对象中获取content属性，并将其存储在contentDelta变量中
         final contentDelta = widget.note.content;
-  
+
         //将contentDelta的内容加载到文本编辑器中
         // _controller.compose(contentDelta,
         //     const TextSelection.collapsed(offset: 0), ChangeSource.local);
@@ -139,7 +153,7 @@ class NotePageState extends State<NotePage> {
                 onPressed: () async {
                   // await saveDocumentToJson();
                   noteController.popNoteAction(currentNote, originNote);
-                  // print(currentNote);
+                  print(currentNote);
                   // 返回主页
                   if (Get.currentRoute == AppRouterName.home.path) {
                     Get.back();
@@ -213,9 +227,11 @@ class NotePageState extends State<NotePage> {
                 IconButton(
                   tooltip: 'Print to log',
                   onPressed: () {
-                    print(
-                      jsonEncode(_controller.document.toDelta().toJson()),
-                    );
+                    // print(
+                    //   jsonEncode(_controller.document.toDelta().toJson()),
+                    // );
+                    // print(noteStatusBloc.currentIconStatus);
+                    print(currentNote);
                     ScaffoldMessenger.of(context).showText(
                       'The quill delta json has been printed to the log.',
                     );
@@ -227,7 +243,7 @@ class NotePageState extends State<NotePage> {
                 IconButton(
                   tooltip: 'Move to Trash',
                   onPressed: () {
-                    print(currentNote);
+                    // print(currentNote);
                     noteController.moveNote(currentNote, StatusNote.trash);
                     //返回主页
                     if (Get.currentRoute == AppRouterName.home.path) {
@@ -240,6 +256,10 @@ class NotePageState extends State<NotePage> {
                   icon: AppIcons.trash,
                   color: Theme.of(context).iconTheme.color,
                 ),
+                //固定当前文档
+                IconPinnedStatus(),
+                //归档当前文档
+                const IconArchiveStatus(),
                 // const HomeScreenButton(),
               ],
             ),
@@ -258,7 +278,7 @@ class NotePageState extends State<NotePage> {
                   enableInteractiveSelection: true,
                   textCapitalization: TextCapitalization.none,
                   keyboardAppearance: Brightness.light,
-                  scrollPhysics: ClampingScrollPhysics(),
+                  scrollPhysics: const ClampingScrollPhysics(),
                   // keyboardEnabled: true,
                 ),
                 scrollController: ScrollController(),
@@ -270,25 +290,4 @@ class NotePageState extends State<NotePage> {
       ),
     );
   }
-
-  // Future<void> saveDocumentToJson() async {
-  //   final json = jsonEncode(_controller.document.toDelta().toJson());
-  //   // print(json);
-  //   // 获取应用程序的文档目录
-  //   final directory = await getApplicationDocumentsDirectory();
-  //   // 创建一个新的文件路径
-  //   final filePath = '${directory.path}/note.json';
-  //   // 创建一个文件对象
-  //   final file = File(filePath);
-  //   // 将 JSON 字符串写入文件
-  //   await file.writeAsString(json);
-  // }
-
-  // @override
-  // void dispose() {
-  //   // final content = _controller.document.toDelta().toJson();
-  //   // _saveNoteAsJson(content);
-  //   saveDocumentToJson();
-  //   super.dispose();
-  // }
 }

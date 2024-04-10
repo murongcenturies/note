@@ -9,6 +9,7 @@ class CommonErrorNotes extends StatelessWidget {
   // 抽屉视图笔记 (用于判断显示哪个错误提示)
   final DrawerSectionView drawerViewNote;
 
+  // ignore: use_super_parameters
   const CommonErrorNotes({
     Key? key,
     required this.drawerViewNote,
@@ -45,6 +46,13 @@ class CommonErrorNotes extends StatelessWidget {
           // 显示 "错误" 图标
           AppIcons.error,
           // 提示文本："加载回收站笔记出错"
+          'errorMsg',
+        );
+      case DrawerSectionView.emotion:
+          return _errorSection(
+          // 显示 "错误" 图标
+          AppIcons.error,
+          // 提示文本："加载情绪笔记出错"
           'errorMsg',
         );
     }

@@ -3,4 +3,5 @@ enum DrawerSectionView {
   home,
   archive,
   trash,
+  emotion,
 }

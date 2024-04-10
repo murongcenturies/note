@@ -2,6 +2,8 @@ import 'package:note/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:note/core/hive/state_note_hive.dart';
 
+import '../../hive/emotion_note_hive.dart';
+
 // 扩展 BuildContext 类，提供便捷访问主题、文本样式和颜色方案
 extension BuildContextExtensions on BuildContext {
   /// 获取当前主题
@@ -94,6 +96,60 @@ extension StatusHiveNoteX on StateNoteHive {
         return StatusNote.archived;
       case StateNoteHive.trash:
         return StatusNote.trash;
+    }
+  }
+}
+
+// 在 Emotion 枚举上添加扩展方法
+extension EmotionExtension on Emotion {
+  // 根据 Emotion 枚举值获取对应的 EmotionHive 值
+  EmotionHive get emotionHive {
+    switch (this) {
+      case Emotion.joyful:
+        return EmotionHive.joyful;
+      case Emotion.sad:
+        return EmotionHive.sad;
+      case Emotion.angry:
+        return EmotionHive.angry;
+      case Emotion.anxious:
+        return EmotionHive.anxious;
+      case Emotion.calm:
+        return EmotionHive.calm;
+      case Emotion.worried:
+        return EmotionHive.worried;
+      case Emotion.surprised:
+        return EmotionHive.surprised;
+      case Emotion.tired:
+        return EmotionHive.tired;
+      default:
+        throw UnimplementedError('Missing EmotionHive for $this');
+    }
+  }
+}
+
+// 在 EmotionHive 枚举上添加扩展方法
+extension EmotionHiveExtension on EmotionHive {
+  // 根据 EmotionHive 枚举值获取对应的 Emotion 值
+  Emotion get emotion {
+    switch (this) {
+      case EmotionHive.joyful:
+        return Emotion.joyful;
+      case EmotionHive.sad:
+        return Emotion.sad;
+      case EmotionHive.angry:
+        return Emotion.angry;
+      case EmotionHive.anxious:
+        return Emotion.anxious;
+      case EmotionHive.calm:
+        return Emotion.calm;
+      case EmotionHive.worried:
+        return Emotion.worried;
+      case EmotionHive.surprised:
+        return Emotion.surprised;
+      case EmotionHive.tired:
+        return Emotion.tired;
+      default:
+        throw UnimplementedError('Missing Emotion for $this');
     }
   }
 }
