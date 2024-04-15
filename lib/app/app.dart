@@ -5,6 +5,7 @@ import 'initial/initial.dart';
 
 class NoteApp extends StatelessWidget {
   final ThemeController _themeController = Get.put(ThemeController());
+  // final TranSlationController _tranSlationController = Get.put(TranSlationController());
 
   NoteApp({super.key});
 
@@ -28,29 +29,11 @@ class NoteApp extends StatelessWidget {
       getPages: AppRouter.routes,
       // 设置默认路由过渡动画
       defaultTransition: Transition.fade,
-      // home: HomeScreen()
+      //语言设置
+      translations: MyTranslations(), //翻译
+      // locale:  Locale(_tranSlationController.currentLanguage.value.toString()..split('.').last), //语言
+      locale: const Locale('zh'), //语言
     );
   }
 }
 
-// class HomeScreen extends StatelessWidget {
-//   final ThemeController _themeController = Get.find();
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Theme Switcher'),
-//       ),
-//       body: Row(children: [
-//         IconButton(
-//           icon: _themeController.getThemeIcon(),
-//           onPressed: _themeController.toggleTheme,
-//         ),
-//         Text(
-//           'sparkler',
-//         ),
-//       ]),
-//     );
-//   }
-// }

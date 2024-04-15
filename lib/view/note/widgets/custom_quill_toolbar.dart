@@ -114,85 +114,146 @@ class MyQuillToolbar extends StatelessWidget {
                     icon: const Icon(
                       Icons.width_normal,
                     ),
+                    tooltip: I18nContent.open.tr,
                   ),
                   QuillToolbarHistoryButton(
                     isUndo: true,
                     controller: controller,
+                    options: QuillToolbarHistoryButtonOptions(
+                      tooltip: I18nContent.undo.tr,
+                    ),
                   ),
                   QuillToolbarHistoryButton(
                     isUndo: false,
                     controller: controller,
+                    options: QuillToolbarHistoryButtonOptions(
+                      tooltip: I18nContent.redo.tr,
+                    ),
                   ),
                   QuillToolbarToggleStyleButton(
-                    options: const QuillToolbarToggleStyleButtonOptions(),
+                    options: QuillToolbarToggleStyleButtonOptions(
+                      tooltip: I18nContent.bold.tr,
+                    ),
                     controller: controller,
                     attribute: Attribute.bold,
                   ),
                   QuillToolbarToggleStyleButton(
-                    options: const QuillToolbarToggleStyleButtonOptions(),
+                    options: QuillToolbarToggleStyleButtonOptions(
+                      tooltip: I18nContent.italic.tr,
+                    ),
                     controller: controller,
                     attribute: Attribute.italic,
                   ),
                   QuillToolbarToggleStyleButton(
+                    options: QuillToolbarToggleStyleButtonOptions(
+                      tooltip: I18nContent.underline.tr,
+                    ),
                     controller: controller,
                     attribute: Attribute.underline,
                   ),
                   QuillToolbarClearFormatButton(
+                    options: QuillToolbarToggleStyleButtonOptions(
+                      tooltip: I18nContent.clearFormat.tr,
+                    ),
                     controller: controller,
                   ),
                   const VerticalDivider(),
                   QuillToolbarImageButton(
+                    options: QuillToolbarImageButtonOptions(
+                      tooltip: I18nContent.image.tr,
+                    ),
                     controller: controller,
                   ),
                   QuillToolbarCameraButton(
+                    options: QuillToolbarCameraButtonOptions(
+                      tooltip: I18nContent.camera.tr,
+                    ),
                     controller: controller,
                   ),
                   QuillToolbarVideoButton(
+                    options: QuillToolbarVideoButtonOptions(
+                      tooltip: I18nContent.video.tr,
+                    ),
                     controller: controller,
                   ),
                   const VerticalDivider(),
                   QuillToolbarColorButton(
+                    options: QuillToolbarColorButtonOptions(
+                      tooltip: I18nContent.colorButton.tr,
+                    ),
                     controller: controller,
                     isBackground: false,
                   ),
                   QuillToolbarColorButton(
+                    options: QuillToolbarColorButtonOptions(
+                      tooltip: I18nContent.colorBackgroundButton.tr,
+                    ),
                     controller: controller,
                     isBackground: true,
                   ),
                   const VerticalDivider(),
                   QuillToolbarSelectHeaderStyleDropdownButton(
+                    options: QuillToolbarSelectHeaderStyleDropdownButtonOptions(
+                      tooltip: I18nContent.header.tr,
+                    ),
                     controller: controller,
                   ),
                   const VerticalDivider(),
                   QuillToolbarToggleCheckListButton(
+                    options: QuillToolbarToggleCheckListButtonOptions(
+                      tooltip: I18nContent.checkList.tr,
+                    ),
                     controller: controller,
                   ),
                   QuillToolbarToggleStyleButton(
+                    options: QuillToolbarToggleStyleButtonOptions(
+                      tooltip: I18nContent.numberedList.tr,
+                    ),
                     controller: controller,
                     attribute: Attribute.ol,
                   ),
                   QuillToolbarToggleStyleButton(
+                    options: QuillToolbarToggleStyleButtonOptions(
+                      tooltip: I18nContent.bulletList.tr,
+                    ),
                     controller: controller,
                     attribute: Attribute.ul,
                   ),
                   QuillToolbarToggleStyleButton(
+                    options: QuillToolbarToggleStyleButtonOptions(
+                      tooltip: I18nContent.inlineCode.tr,
+                    ),
                     controller: controller,
                     attribute: Attribute.inlineCode,
                   ),
                   QuillToolbarToggleStyleButton(
+                    options: QuillToolbarToggleStyleButtonOptions(
+                      tooltip: I18nContent.blockQuote.tr,
+                    ),
                     controller: controller,
                     attribute: Attribute.blockQuote,
                   ),
                   QuillToolbarIndentButton(
+                    options: QuillToolbarIndentButtonOptions(
+                      tooltip: I18nContent.increase.tr,
+                    ),
                     controller: controller,
                     isIncrease: true,
                   ),
                   QuillToolbarIndentButton(
+                    options: QuillToolbarIndentButtonOptions(
+                      tooltip: I18nContent.decrease.tr,
+                    ),
                     controller: controller,
                     isIncrease: false,
                   ),
                   const VerticalDivider(),
-                  QuillToolbarLinkStyleButton(controller: controller),
+                  QuillToolbarLinkStyleButton(
+                    controller: controller,
+                    options: QuillToolbarLinkStyleButtonOptions(
+                      tooltip: I18nContent.link.tr,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -200,6 +261,9 @@ class MyQuillToolbar extends StatelessWidget {
         }
         return QuillToolbar.simple(
           configurations: QuillSimpleToolbarConfigurations(
+            sharedConfigurations: const QuillSharedConfigurations(
+              locale: Locale('zh', 'CN'),
+            ),
             controller: controller,
             showAlignmentButtons: true,
             multiRowsDisplay: true,
@@ -292,6 +356,7 @@ class MyQuillToolbar extends StatelessWidget {
                 onPressed: () {
                   settingsController.useCustomQuillToolbar.value = true;
                 },
+                tooltip: I18nContent.customToolbar.tr,
               ),
             ],
             embedButtons: FlutterQuillEmbeds.toolbarButtons(

@@ -35,7 +35,17 @@ class ItemNote extends StatelessWidget {
 
   // 点击笔记项触发的事件，获取该笔记的详细信息
   void _onTapItem(BuildContext context) {
-    Get.find<NoteController>(tag: 'home').getById(note.id);
+    // 使用 GetX 获取 DrawerNavigationController
+    final DrawerNavigationController drawerController =
+      Get.find<DrawerNavigationController>();
+        // 获取当前选中的视图
+    final selectedView = drawerController
+        .convertToDrawerSectionView(drawerController.selectedNavItem.value);
+    // 获取视图名称
+    String name = selectedView.toString().split('.').last;
+    // print(name);
+    // 使用 NoteController 获取笔记详情
+    Get.find<NoteController>(tag: name).getById(note.id);
     // context.read<NoteBloc>().add(GetNoteById(note.id));
   }
 }

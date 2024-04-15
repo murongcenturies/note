@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:get/get.dart';
+import 'package:note/core/core.dart';
 import 'sign_in_form.dart';
 
 /// 自定义登录对话框
@@ -11,13 +12,14 @@ Future<void> customSigninDialog(BuildContext context,
   await showGeneralDialog(
       barrierDismissible: true,
       // 是否可以点击背景关闭对话框
-      barrierLabel: "Sign up",
+      barrierLabel: I18nContent.sign.tr,
       // 背景语义标签
       context: context,
       transitionDuration: const Duration(milliseconds: 400),
       // 动画时长
       transitionBuilder: (context, animation, secondaryAnimation, child) {
-        Tween<Offset> tween = Tween(begin: const Offset(0, -1), end: Offset.zero);
+        Tween<Offset> tween =
+            Tween(begin: const Offset(0, -1), end: Offset.zero);
         return SlideTransition(
             position: tween.animate(
                 CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
@@ -44,22 +46,23 @@ Future<void> customSigninDialog(BuildContext context,
               body: Stack(
                 clipBehavior: Clip.none,
                 children: [
-                  const Column(
+                  Column(
                     children: [
                       Text(
-                        "Sign In", // 登录标题
-                        style: TextStyle(fontSize: 34, fontFamily: "Poppins"),
+                        I18nContent.signIn.tr, // 登录标题
+                        style: const TextStyle(
+                            fontSize: 34, fontFamily: "Poppins"),
                       ),
-                      SignInForm(), // 登录表单
-                      Divider(),
+                      const SignInForm(), // 登录表单
+                      const Divider(),
                       Expanded(
                         child: Align(
                           alignment: Alignment.center,
                           child: Padding(
-                            padding: EdgeInsets.only(bottom: 10.0),
+                            padding: const EdgeInsets.only(bottom: 10.0),
                             child: Text(
-                              "Discover more possibilities, start here",
-                              style: TextStyle(fontSize: 18),
+                              I18nContent.hint.tr, // 提示文本
+                              style: const TextStyle(fontSize: 18),
                             ),
                           ),
                         ),

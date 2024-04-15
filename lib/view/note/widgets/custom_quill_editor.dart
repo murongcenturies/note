@@ -9,6 +9,7 @@ import 'package:flutter_quill/flutter_quill.dart';
 import 'package:flutter_quill_extensions/embeds/widgets/image.dart'
     show getImageProviderByImageSource, imageFileExtensions;
 import 'package:flutter_quill_extensions/flutter_quill_extensions.dart';
+import 'package:get/get.dart';
 import 'package:path/path.dart' as path;
 
 import 'package:note/core/core.dart';
@@ -62,7 +63,7 @@ class MyQuillEditor extends StatelessWidget {
           ),
         ),
         scrollable: true,
-        placeholder: 'Start writing your notes...',
+        placeholder: I18nContent.writing.tr,
         padding: const EdgeInsets.all(16),
         onImagePaste: (imageBytes) async {
           if (isWeb()) {

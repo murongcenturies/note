@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:parallax_rain/parallax_rain.dart';
 import './widgets/widgets.dart';
 
@@ -15,7 +16,7 @@ class LoginPage extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      appBar: const CustomAppBar(title: 'sparkler'),
+      appBar:  CustomAppBar(title: I18nContent.title.tr),
       // 显示 ParallaxRain 效果
       body: Stack(
         children: <Widget>[
@@ -74,7 +75,7 @@ class LoginPage extends StatelessWidget {
                     ), // Adjust button text size
                   ),
                   child: Text(
-                    'Start Now',
+                    I18nContent.start.tr,
                     style: TextStyle(
                       fontSize: screenWidth * 0.015,
                     ),

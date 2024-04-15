@@ -19,7 +19,7 @@ class ItemTheme extends StatelessWidget {
       return RadioListTile<AppThemeMode>(
         // 主题单选按钮
         title: Text(
-          AppThemeMode.values[indexTheme].toString().split('.')[1],
+          AppThemeMode.values[indexTheme].toString().tr,
         ), // 主题标题
 
         value: AppThemeMode.values[indexTheme], // 主题模式

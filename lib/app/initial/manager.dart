@@ -7,8 +7,9 @@ class DependencyManager extends Bindings {
     Get.lazyPut(() => ThemeController());
     Get.lazyPut(() => LoginController());
     Get.lazyPut(() => DrawerNavigationController());
-    // Get.lazyPut(() => NoteController());
     Get.lazyPut(() => SettingsController());
+    Get.put(TranSlationController());
+
 
     // => 仓库注册 (使用延迟加载单例) //
     Get.lazyPut<NoteRepositories>(
@@ -17,7 +18,7 @@ class DependencyManager extends Bindings {
 
     // => 数据源注册 (使用延迟加载单例) //
     Get.lazyPut<NoteLocalDataSourse>(() => NoteLocalDataSourceWithHiveImpl());
-
+    // 初始化数据库
     Get.put<NoteLocalDataSourse>(NoteLocalDataSourceWithHiveImpl()..initDb());
     // 初始化数据库
     // Get.putAsync<NoteLocalDataSourse>(() async {

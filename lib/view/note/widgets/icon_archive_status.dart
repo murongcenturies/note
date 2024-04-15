@@ -19,11 +19,15 @@ class IconArchiveStatus extends StatelessWidget {
         return IconButton(
           // 设置图标，根据当前存档状态选择合适的图标
           icon: _iconCurrentStatus(currentArchiveStatus.value),
+          color: Theme.of(context).iconTheme.color,
           // 点击按钮触发归档/取消归档操作
           onPressed: () => _onToggleArchiveStatus(
             currentNote: currentNote.value,
             currentNoteStatus: currentNoteStatus.value,
           ),
+          tooltip: currentArchiveStatus.value == ArchiveStatus.archive
+              ? I18nContent.unarchiveNote.tr
+              : I18nContent.archiveNote.tr,
         );
       },
     );
@@ -49,13 +53,18 @@ class IconArchiveStatus extends StatelessWidget {
     final newNoteStatus = currentNoteStatus == StatusNote.archived
         ? StatusNote.undefined // 取消归档后，状态变为未定义
         : StatusNote.archived; // 归档后，状态变为已归档
-
+    // 使用 GetX 获取 DrawerNavigationController
+    final DrawerNavigationController drawerController =
+        Get.find<DrawerNavigationController>();
+    // 获取当前选中的视图
+    final selectedView = drawerController
+        .convertToDrawerSectionView(drawerController.selectedNavItem.value);
+    // 获取视图名称
+    String name = selectedView.toString().split('.').last;
+    //  print( 'that is ${Get.find<NoteController>(tag: name).noteState.value}');
     //通知更新笔记状态
-    Get.find<NoteController>(tag: 'home').moveNote(currentNote, newNoteStatus);
-    // if (Get.currentRoute == AppRouterName.home.path) {
-    //   Get.back();
-    // } else {
-    //   Get.offNamedUntil(AppRouterName.home.path, (route) => false);
-    // }
+    Get.find<NoteController>(tag: name).moveNote(currentNote, newNoteStatus);
+    Get.back();
+    // print( 'this is ${Get.find<NoteController>(tag: name).noteState.value}');
   }
 }

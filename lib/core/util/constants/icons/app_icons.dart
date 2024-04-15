@@ -1,5 +1,6 @@
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
+
 // 应用图标 (不可变类)
 @immutable
 class AppIcons {
@@ -8,7 +9,7 @@ class AppIcons {
   // 通用图标
   static const arrowBack = Icon(Icons.arrow_back_rounded); // 左返回箭头
   static const leftBack = Icon(Icons.arrow_forward_rounded); // 返回箭头
-
+  static const language = Icon(Icons.language); // 语言
   static const home = Icon(Icons.home); //主页按钮
 
   // 抽屉 (Drawer) 图标
@@ -38,14 +39,16 @@ class AppIcons {
   static const redo = Icon(Icons.redo); // 重做
   static const undo = Icon(Icons.undo); // 撤销
 
-
   static const drawColor = Icon(Icons.color_lens_outlined); // 选择颜色
 
-  static const defuaulCheckColor = Icon(Icons.format_color_reset_outlined); // 默认勾选框颜色
-  static const check = Icon(Icons.check_rounded, color: Colors.blueAccent); // 勾选框 (蓝色)
+  static const defuaulCheckColor =
+      Icon(Icons.format_color_reset_outlined); // 默认勾选框颜色
+  static const check =
+      Icon(Icons.check_rounded, color: Colors.blueAccent); // 勾选框 (蓝色)
 
   static const trashNote = Icon(Icons.delete_outline_rounded); // 删除笔记
-  // static const sendNote = Icon(Icons.share_sharp); // 分享笔记
+  static const noteHtml = Icon(Icons.html); // 笔记 HTML
+  static const notePdf = Icon(Icons.picture_as_pdf); // 笔记 PDF
 
   static const deleteNote = Icon(Icons.delete_forever_outlined); // 永久删除笔记
   static const restoreNote = Icon(Icons.restore); // 还原笔记
@@ -53,31 +56,43 @@ class AppIcons {
   static const light = Icon(Icons.light_mode); // 主题明
   static const dark = Icon(Icons.dark_mode); // 主题明
 
-  static const email = Icon(Icons.email, color: Colors.grey,); // 灰色邮箱
-  static const password = Icon( Icons.lock, color: Colors.grey,); // 灰色密码
+  static const email = Icon(
+    Icons.email,
+    color: Colors.grey,
+  ); // 灰色邮箱
+  static const password = Icon(
+    Icons.lock,
+    color: Colors.grey,
+  ); // 灰色密码
 
   // 空状态图标
   static const emptySearch = Icon(Icons.search, size: 100); // 空搜索
   static const emptyNote = Icon(Icons.landscape_outlined, size: 150); // 空笔记
-  static const emptyArchivesNote = Icon(Icons.archive_outlined, size: 150); // 空存档笔记
-  static const emptyTrashNote = Icon(Icons.delete_outline_rounded, size: 150); // 空回收站笔记
-  static const emptyEmotionNote = Icon(Icons.emoji_emotions_outlined, size: 150); // 空情绪笔记
+  static const emptyArchivesNote =
+      Icon(Icons.archive_outlined, size: 150); // 空存档笔记
+  static const emptyTrashNote =
+      Icon(Icons.delete_outline_rounded, size: 150); // 空回收站笔记
+  static const emptyEmotionNote =
+      Icon(Icons.emoji_emotions_outlined, size: 150); // 空情绪笔记
 
   // 错误状态图标
   static const error = Icon(Icons.error_outline_outlined, size: 150); // 错误
 
- //窗口操作图标
-  static const max = Icon(EvaIcons.squareOutline ); // 最大化
-  static const min = Icon(EvaIcons.minusSquareOutline ); // 最小化
-  static const close = Icon(EvaIcons.closeSquareOutline ); // 关闭
+  //窗口操作图标
+  static const max = Icon(EvaIcons.squareOutline); // 最大化
+  static const min = Icon(EvaIcons.minusSquareOutline); // 最小化
+  static const close = Icon(EvaIcons.closeSquareOutline); // 关闭
   //logo
-  static const logo=('assets/icon/Icon.png');
+  static const logo = ('assets/icon/Icon.png');
   //background
-  static const cloud=('assets/background/werow.png');
+  static const cloud = ('assets/background/werow.png');
   //编辑器
   static const more = Icon(Icons.more_vert_outlined); // 更多
   static const share = Icon(Icons.share); // 分享
   static const print = Icon(Icons.print); // 更多
+  //国家
+  static const zh = ('assets/country/cn.svg'); // 中国
+  static const en = ('assets/country/us.svg'); // 美国
   // 用户头像
   // static final List<String> profiles = [
   //   'assets/avaters/profile_1.png',

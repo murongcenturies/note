@@ -99,7 +99,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   Widget _buildSettingButton() {
     return Tooltip(
-      message: '设置',
+      message: I18nContent.set.tr,
       child: IconButton(
         icon: AppIcons.setting,
         onPressed: () {
@@ -111,7 +111,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   Widget _buildMinButton() {
     return Tooltip(
-      message: '最小化',
+      message: I18nContent.min.tr,
       child: IconButton(
         icon: AppIcons.min,
         onPressed: WindowManager.instance.minimize,
@@ -121,7 +121,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   Widget _buildMaxButton() {
     return Tooltip(
-      message: '最大化',
+      message: I18nContent.max.tr,
       child: IconButton(
         icon: AppIcons.max,
         onPressed: () {
@@ -140,7 +140,7 @@ class _CustomAppBarState extends State<CustomAppBar> {
 
   Widget _buildCloseButton() {
     return Tooltip(
-      message: '关闭',
+      message: I18nContent.close.tr,
       child: IconButton(
         icon: AppIcons.close,
         onPressed: WindowManager.instance.close,

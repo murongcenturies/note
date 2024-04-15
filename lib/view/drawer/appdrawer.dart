@@ -40,16 +40,16 @@ class AppDrawer extends StatelessWidget {
 
   /// 构建抽屉的文本标志部分。
   Widget _buildTextLogo(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+    return  Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
       child: Text.rich(
         TextSpan(
           children: [
             TextSpan(
-              text: 'Keep Up Note',
-              style: TextStyle(fontWeight: FontWeight.bold),
+                text: I18nContent.drawer.tr,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
-            TextSpan(text: ' '),
+            const TextSpan(text: ' '),
           ],
         ),
       ),

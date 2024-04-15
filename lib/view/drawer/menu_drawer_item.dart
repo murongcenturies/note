@@ -6,7 +6,7 @@ import 'package:note/core/core.dart';
 class MenuDrawerItem extends StatelessWidget {
   final DrawerViews drawerViews;
 
-  const MenuDrawerItem(this.drawerViews, {super.key});
+  const  MenuDrawerItem(this.drawerViews, {super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -5,8 +5,13 @@ import 'package:get/get.dart';
 class TilesSection extends StatelessWidget {
   final String title; // 分块标题
   final List<Widget> tiles; // 分块内项目列表
+  final List<Widget> children;
 
-  const TilesSection({super.key, required this.title, required this.tiles});
+  const TilesSection(
+      {super.key,
+      required this.title,
+      required this.tiles,
+      required this.children});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +38,8 @@ class TilesSection extends StatelessWidget {
           ),
         ),
         // 展开项目列表构建每一项
-        ...tiles
+        ...tiles,
+        ...children,
       ],
     );
   }

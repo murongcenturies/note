@@ -6,7 +6,8 @@ import 'item_theme.dart';
 import '../../../core/core.dart';
 
 class ThemesItemTile extends StatelessWidget {
-  const ThemesItemTile({super.key});
+  // ignore: prefer_const_constructors_in_immutables
+  ThemesItemTile({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,16 +16,14 @@ class ThemesItemTile extends StatelessWidget {
       final currentTheme = themeController.getTheme(); // 当前主题模式
 
       return ListTile(
-        title: const Text('Themes'), // 标题为 “主题”
+        title: Text(I18nContent.theme.tr), // 标题为 “主题”
         trailing: Row(
           mainAxisSize: MainAxisSize.min, // 设置Row的主轴大小为最小
           children: <Widget>[
             themeController.getThemeIcon(), // 显示当前主题对应的图标
             const SizedBox(width: 8), // 添加一些间距
             Text(
-              currentTheme
-                  .toString()
-                  .split('.')[1], // 显示当前主题的枚举值名称
+              currentTheme.toString().tr, // 显示当前主题的枚举值名称
               style: context.textTheme.bodyLarge, // 设置文本样式
             ),
           ],
@@ -43,7 +42,7 @@ class ThemesItemTile extends StatelessWidget {
         return AlertDialog(
           // 设置内容内边距
           contentPadding: const EdgeInsets.symmetric(vertical: 20),
-          title: const Text('Choose Theme'), // 弹窗标题为 “选择主题”
+          title: Text(I18nContent.chooseTheme.tr), // 弹窗标题为 “选择主题”
           content: Column(
             // 设置最小高度，使其内容自适应
             mainAxisSize: MainAxisSize.min,

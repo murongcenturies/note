@@ -19,9 +19,9 @@ class SignInForm extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Email",
-                  style: TextStyle(color: Colors.black54),
+                 Text(
+                  I18nContent.email.tr,
+                  style: const TextStyle(color: Colors.black54),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 16),
@@ -29,7 +29,7 @@ class SignInForm extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         loginController.showError('email');
-                        return "Please enter your email";
+                        return I18nContent.enterEmail.tr;
                       } else {
                         loginController.hideError('email');
                         return null;
@@ -64,9 +64,9 @@ class SignInForm extends StatelessWidget {
                     ),
                   ),
                 ),
-                const Text(
-                  "Password",
-                  style: TextStyle(color: Colors.black54),
+                 Text(
+                  I18nContent.password.tr,
+                  style: const TextStyle(color: Colors.black54),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(top: 8, bottom: 16),
@@ -75,7 +75,7 @@ class SignInForm extends StatelessWidget {
                     validator: (value) {
                       if (value!.isEmpty) {
                         loginController.showError('password');
-                        return "Please enter your password";
+                        return I18nContent.enterPassword.tr;
                       } else {
                         loginController.hideError('password');
                         return null;
@@ -137,9 +137,9 @@ class SignInForm extends StatelessWidget {
                                 strokeWidth: 2.0,
                               ),
                             )
-                          : const Text(
-                              "Sign In",
-                              style: TextStyle(fontSize: 18),
+                          :  Text(
+                              I18nContent.signIn.tr,
+                              style: const TextStyle(fontSize: 18),
                             );
                     }),
                   ),

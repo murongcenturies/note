@@ -5,7 +5,7 @@ export './app_function.dart';
 export './color_note.dart';
 
 // 声明抽屉选择相关API
-export './drawe_select.dart';
+export './drawer_select.dart';
 
 // 声明日期时间格式化函数API
 export './format_date_time.dart';

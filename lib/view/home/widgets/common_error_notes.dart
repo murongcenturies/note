@@ -1,5 +1,6 @@
 // 引入 Flutter 库和应用核心类库
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:note/core/core.dart';
 
 import 'common_fix_scrolling.dart';
@@ -31,7 +32,7 @@ class CommonErrorNotes extends StatelessWidget {
             // 显示 "错误" 图标
             AppIcons.error,
             // 提示文本："加载笔记出错"
-            'errorMsg',
+            I18nContent.errorMsg.tr,
           ),
         );
       case DrawerSectionView.archive:
@@ -39,21 +40,21 @@ class CommonErrorNotes extends StatelessWidget {
           // 显示 "错误" 图标
           AppIcons.error,
           // 提示文本："加载归档笔记出错"
-          'errorMsg',
+          I18nContent.errorArchive.tr,
         );
       case DrawerSectionView.trash:
         return _errorSection(
           // 显示 "错误" 图标
           AppIcons.error,
           // 提示文本："加载回收站笔记出错"
-          'errorMsg',
+          I18nContent.errorTrash.tr,
         );
       case DrawerSectionView.emotion:
           return _errorSection(
           // 显示 "错误" 图标
           AppIcons.error,
           // 提示文本："加载情绪笔记出错"
-          'errorMsg',
+          I18nContent.errorEmotion.tr,
         );
     }
   }

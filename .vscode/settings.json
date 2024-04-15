@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
         "Amatic",
+        "appdrawer",
         "cupertino",
         "dartz",
         "Emptylist",
@@ -8,11 +9,13 @@
         "LTRB",
         "overscroll",
         "Searchcontroller",
+        "Signin",
         "Snackar",
         "Sourse",
         "sqflite",
         "UNARCHIVED",
         "usecase",
         "usecases"
-    ]
+    ],
+    "codescene.enableAutoRefactor": true
 }

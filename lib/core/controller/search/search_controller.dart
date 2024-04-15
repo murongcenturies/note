@@ -86,9 +86,9 @@ class NoteSearchController extends GetxController {
   String _mapFailureMsg(Failure failure) {
     switch (failure.runtimeType) {
       case DatabaseFailure _:
-        return DATABASE_FAILURE_MSG;
+        return AppStrings.DATABASE_FAILURE_MSG.tr;
       case NoDataFailure _:
-        return NO_DATA_FAILURE_MSG;
+        return AppStrings.NO_DATA_FAILURE_MSG.tr;
       default:
         return 'Unexpected Error , Please try again later . ';
     }

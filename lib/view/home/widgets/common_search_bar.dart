@@ -3,12 +3,13 @@ import 'package:get/get.dart';
 import 'package:note/core/core.dart';
 import '../../search/notes_searching.dart';
 import 'widgets.dart';
+
 // 通用搜索栏组件
 class CommonSearchBar extends StatelessWidget {
-   const CommonSearchBar({super.key});
+  CommonSearchBar({super.key});
 
   // 搜索提示文本
-  final String hintText = 'Search your notes';
+  final String hintText = I18nContent.search.tr;
   // 打开侧边栏方法
   void _openDrawer(BuildContext context) {
     Scaffold.of(context).openDrawer();
@@ -45,11 +46,10 @@ class CommonSearchBar extends StatelessWidget {
                     Text(hintText, style: context.textTheme.bodyLarge),
                   ],
                 ),
-                 Row(
+                Row(
                   // 右侧图标 (网格视图和个人资料)
                   children: [
                     IconStatusGridNote(), // 网格视图图标
-                    // IconProfile(), // 个人资料图标
                   ],
                 ),
               ],
@@ -58,10 +58,7 @@ class CommonSearchBar extends StatelessWidget {
         ),
       ),
     );
-
-
   }
-
 
   // 显示搜索界面方法
   Future _showSearch(BuildContext context) =>

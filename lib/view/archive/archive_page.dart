@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:note/view/home/widgets/widgets.dart';
@@ -11,14 +13,15 @@ import 'app_bar_archive.dart';
 class ArchivePage extends StatelessWidget {
   // HomePage({super.key});
 
-  final DrawerNavigationController drawerController =
-      Get.find<DrawerNavigationController>();
+   final DrawerNavigationController drawerController =
+      Get.put(DrawerNavigationController());
   final StatusIconsController noteStatue = Get.put(StatusIconsController());
+    final EmotionController emotionController = Get.put(EmotionController());
   late final NoteController _controller;
   ArchivePage({super.key}) {
     final selectedView = drawerController
         .convertToDrawerSectionView(drawerController.selectedNavItem.value);
-    print(selectedView);
+    // print(selectedView);
     // 获取视图名称
     String name = selectedView.toString().split('.').last;
     // 初始化 NoteController 并将其放入 GetX 管理
@@ -36,13 +39,22 @@ class ArchivePage extends StatelessWidget {
       // 显示 ParallaxRain 效果
       body: Stack(
         children: <Widget>[
-          // 添加背景图片的 SizedBox
-          const SizedBox.expand(
+          // 添加背景图片
+          Positioned.fill(
             child: DecoratedBox(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(AppIcons.cloud), // 背景图片路径
                   fit: BoxFit.fill, // 适应方式，可以根据需求调整
+                ),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+                child: Container(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .background
+                      .withOpacity(0.5), // 使用主题背景颜色
                 ),
               ),
             ),
@@ -51,9 +63,9 @@ class ArchivePage extends StatelessWidget {
           Obx(() {
             final state = _controller.noteState.value;
             displayNotesMsg(state);
-            // print(state);
+            // print(_controller.selectedNavItem);
             if (state is LoadingState) {
-              print(state);
+              // print(state);
               return CommonLoadingNotes(state.drawerSectionView);
             } else if (state is EmptyNoteState) {
               return CommonEmptyNotes(state.drawerSectionView);
@@ -66,7 +78,7 @@ class ArchivePage extends StatelessWidget {
                 child: CommonNotesView(
                   drawerSection: DrawerSectionView.archive,
                   otherNotes: state.otherNotes,
-                  pinnedNotes: const [], // 回收站不展示置顶笔记
+                  pinnedNotes: const [], // 不展示置顶笔记
                 ),
               );
             }
@@ -83,14 +95,23 @@ class ArchivePage extends StatelessWidget {
     if (state is SuccessState) {
       // 刷新笔记列表并显示成功信息
       _controller.refreshNotes();
+      // print(state.message);
       SchedulerBinding.instance.addPostFrameCallback((_) {
         AppAlerts.displaySnackbarMsg(Get.context!, state.message);
       });
-    } else if (state is GoPopNoteState) {
-      // 返回上一页：刷新笔记列表
+    } else if (state is ToggleSuccessState) {
+      // print(state.message);
+      // 显示可撤销操作的 Snackbar
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        AppAlerts.displaySnackarUndoMove(Get.context!, state.message);
+        _controller.refreshNotes();
+      });
+    }  else if (state is GoPopNoteState) {
+      // 刷新笔记列表
       _controller.refreshNotes();
     } else if (state is GetNoteByIdState) {
-      // 获取指定笔记详情
+      // print(state.note);
+      // 处理获取单个笔记信息的逻辑
       _getNoteByIdState(state.note);
     }
   }
@@ -99,7 +120,9 @@ class ArchivePage extends StatelessWidget {
   void _getNoteByIdState(Note note) {
     Future.delayed(Duration.zero, () {
       // 更新图标状态
+      
       noteStatue.toggleIconsStatus(note);
+      emotionController.toggleEmotionIconsStatus(note, note.emotion);
     });
 
     // 导航到笔记详情页面
@@ -108,7 +131,14 @@ class ArchivePage extends StatelessWidget {
 
 // 导航到笔记详情页面
   void _navigateToNoteDetail(Note note) async {
+    // print(_controller.selectedNavItem);
     await Future.delayed(Duration.zero);
-    Get.toNamed(AppRouterName.note.path, arguments: note);
+        Get.toNamed(
+      AppRouterName.note.path,
+      arguments: {
+        'note': note,
+        'noteController': _controller,
+      },
+    );
   }
 }

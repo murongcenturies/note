@@ -6,7 +6,7 @@ import '../home/widgets/grid_view_notes.dart';
 
 class NotesSearching extends SearchDelegate {
   @override
-  String? get searchFieldLabel => 'Search your notes';
+  String? get searchFieldLabel => I18nContent.search.tr;
 
   @override
   TextStyle? get searchFieldStyle => const TextStyle().copyWith(fontSize: 18.0);

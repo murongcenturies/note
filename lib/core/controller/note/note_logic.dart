@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:flutter_quill/quill_delta.dart';
 import 'package:get/get.dart';
 import 'package:note/core/core.dart';
 
@@ -36,20 +37,16 @@ class NoteController extends GetxController {
     // await Future.delayed(const Duration(seconds: 2));
     // 映射返回: 置顶笔记 || 非置顶笔记 (其他笔记) || 空笔记
     _noteState.value = _mapLoadNotesState(failureOrLoaded, selectedNavItem);
-    update();
-    // print('it is here');
-    print(_noteState.value);
-    // _noteState.value = EmptyNoteState(DrawerSectionView.home);
   }
 
   Future<void> refreshNotes() async {
+    //加载笔记
     final GetNotesUsecase getNotes = Get.find();
     // 获取所有笔记结果
     final failureOrLoaded = await getNotes();
-    // await Future.delayed(const Duration(seconds: 2));
     // 映射返回: 置顶笔记 || 非置顶笔记 (其他笔记) || 空笔记
     _noteState.value = _mapLoadNotesState(failureOrLoaded, selectedNavItem);
-    update();
+    // print(selectedNavItem);
     // print(_noteState.value);
   }
 
@@ -66,14 +63,14 @@ class NoteController extends GetxController {
         _mapFailureMsg(failure),
         DrawerSelect.drawerSection,
       ),
-      (_) => SuccessState(ADD_SUCCESS_MSG),
+      (_) => SuccessState(AppStrings.ADD_SUCCESS_MSG.tr),
     );
   }
 
   // 处理空输入事件的方法
   void handleEmptyInputs() {
     // 更新状态为EmptyInputsState，并提供提示信息
-    noteState.value = EmptyInputsState(EMPTY_TEXT_MSG);
+    noteState.value = EmptyInputsState(AppStrings.EMPTY_TEXT_MSG.tr);
   }
 
   // 处理获取笔记详情事件的方法
@@ -112,10 +109,8 @@ class NoteController extends GetxController {
         _mapFailureMsg(failure),
         DrawerSelect.drawerSection,
       ),
-      (_) => SuccessState(UPDATE_SUCCESS_MSG),
+      (_) => SuccessState(AppStrings.UPDATE_SUCCESS_MSG.tr),
     );
-    // return noteState.value;
-    // print(noteState.value);
   }
 
   // 处理删除笔记事件的方法
@@ -131,8 +126,31 @@ class NoteController extends GetxController {
         _mapFailureMsg(failure),
         DrawerSelect.drawerSection,
       ),
-      (_) => SuccessState(DELETE_SUCCESS_MSG),
+      (_) => SuccessState(AppStrings.DELETE_SUCCESS_MSG.tr),
     );
+    returnNote();
+  }
+
+//从笔记返回
+  void returnNote() {
+    noteState.value = GoPopNoteState();
+  }
+
+  bool isNoteOrEmpty(Delta noteDelta) {
+    // Delta object should have only one operation
+    if (noteDelta.length != 1) {
+      return false;
+    }
+
+    // The operation should be an insert operation
+    Operation operation = noteDelta.first;
+    if (!operation.isInsert) {
+      return false;
+    }
+
+    // The inserted content should be empty or only contain newline
+    String content = operation.data is String ? operation.data as String : '';
+    return content.isEmpty || content == '\n';
   }
 
   // 处理返回操作事件的方法
@@ -144,11 +162,11 @@ class NoteController extends GetxController {
     final Note updatedNote = currentNote.copyWith(modifiedTime: DateTime.now());
 
     // 检查笔记是否为空
-    final bool isNoteEmpty = currentNote.content.isEmpty;
+    final bool isNoteEmpty = isNoteOrEmpty(currentNote.content);
 
     if (_isNewNote && isNoteEmpty) {
       // 新建笔记为空，则更新状态为EmptyInputsState，并提供提示信息
-      noteState.value = EmptyInputsState(EMPTY_TEXT_MSG);
+      noteState.value = EmptyInputsState(AppStrings.EMPTY_TEXT_MSG.tr);
     } else if (_isNewNote || (!_isNewNote && isDirty)) {
       // 笔记已修改，需要更新
       if (_isNewNote) {
@@ -159,6 +177,7 @@ class NoteController extends GetxController {
         updateNoteAll(updatedNote);
       }
     }
+    returnNote();
   }
 
 // 处理移动笔记事件的方法
@@ -168,16 +187,14 @@ class NoteController extends GetxController {
 
     if (!existsNote) {
       // 笔记不存在，则更新状态为EmptyInputsState，并提供提示信息
-      noteState.value = EmptyInputsState(EMPTY_TEXT_MSG);
+      noteState.value = EmptyInputsState(AppStrings.EMPTY_TEXT_MSG.tr);
       // 通知关闭详情页面
-      // noteState.value = GoPopNoteState();
+      returnNote();
       return;
     }
 
     // 存储旧的笔记对象
     oldNote = note;
-    print('OLD: $oldNote');
-
     // 内部方法，用于更新笔记并根据结果更新状态
     Future<NoteState> updateNoteAndEmit({
       required StatusNote statusNote, // 要更新到的笔记状态
@@ -212,21 +229,21 @@ class NoteController extends GetxController {
           successState: ToggleSuccessState(
             // 更新切换成功状态
             note.stateNote == StatusNote.pinned // 判断是否取消置顶
-                ? NOTE_ARCHIVE_WITH_UNPINNED_MSG // 提示已归档并且取消置顶
-                : NOTE_ARCHIVE_MSG, // 提示已归档
+                ? AppStrings.NOTE_ARCHIVE_WITH_UNPINNED_MSG.tr // 提示已归档并且取消置顶
+                : AppStrings.NOTE_ARCHIVE_MSG.tr, // 提示已归档
           ),
         );
         break;
       case StatusNote.undefined: // 未定义状态
         newState = updateNoteAndEmit(
           statusNote: newStatus,
-          successState: ToggleSuccessState(NOTE_UNARCHIVED_MSG), // 更新取消归档成功状态
+          successState: ToggleSuccessState(AppStrings.NOTE_UNARCHIVED_MSG.tr), // 更新取消归档成功状态
         );
         break;
       case StatusNote.trash: // 垃圾桶状态
         newState = updateNoteAndEmit(
           statusNote: newStatus,
-          successState: ToggleSuccessState(MOVE_NOTE_TRASH_MSG), // 更新移动到垃圾桶成功状态
+          successState: ToggleSuccessState(AppStrings.MOVE_NOTE_TRASH_MSG.tr), // 更新移动到垃圾桶成功状态
         );
         break;
       case StatusNote.pinned: // 置顶状态
@@ -235,19 +252,19 @@ class NoteController extends GetxController {
     }
 
     noteState.value = await newState!;
-
+    // print('1--${noteState.value}');
     // 通知关闭详情页面
-    // noteState.value = GoPopNoteState();
+    // returnNote();
+    // print('2--${noteState.value}');
   }
 
   // 处理撤销移动笔记事件的方法
   void undoMoveNote() async {
     // 调用用例类更新笔记 (还原旧的笔记)
-    print('OLDer: $oldNote');
     final UpdateNoteUsecase updateNote = Get.find();
     await updateNote(oldNote!);
     // 更新返回上层状态
-    // noteState.value = GoPopNoteState();
+    // returnNote();
   }
 
 //-----------------------------------------------------------------//
@@ -335,9 +352,9 @@ class NoteController extends GetxController {
     // 根据错误类型，返回不同的错误信息
     switch (failure.runtimeType) {
       case const (DatabaseFailure): // 数据库错误
-        return DATABASE_FAILURE_MSG; // 数据库错误提示
+        return AppStrings.DATABASE_FAILURE_MSG.tr; // 数据库错误提示
       case const (NoDataFailure): // 无数据错误
-        return NO_DATA_FAILURE_MSG; // 无数据错误提示
+        return AppStrings.NO_DATA_FAILURE_MSG.tr; // 无数据错误提示
       default: // 未知错误
         return 'Unexpected Error , Please try again later .'; // 通用错误提示 未知错误，请稍后再试。
     }

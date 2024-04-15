@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../../../../../core/core.dart';
 import '../home/widgets/icon_grid_status.dart';
@@ -12,7 +13,7 @@ class AppBarEmotion extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       // 标题: "归档"
-      title: const Text('Emotion'),
+      title: Text(I18nContent.emotion.tr),
       // 操作按钮:
       // - 搜索笔记 (使用 AppIcons.searchNote 图标)
       // - 切换网格视图/列表视图 (使用 IconStatusGridNote 图标)

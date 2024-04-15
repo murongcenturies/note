@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:note/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:note/core/hive/state_note_hive.dart';
@@ -38,15 +39,15 @@ extension DrawerViewsExtensions on DrawerViews {
   String get name {
     switch (this) {
       case DrawerViews.home:
-        return 'Notes';
+        return I18nContent.note.tr;
       case DrawerViews.archive:
-        return 'Archive';
+        return I18nContent.archive.tr;
       case DrawerViews.trash:
-        return 'Trash';
+        return I18nContent.trash.tr;
       case DrawerViews.emotion:
-        return 'Emotion';
+        return I18nContent.emotion.tr;
       case DrawerViews.setting:
-        return 'Setting';
+        return I18nContent.set.tr;
     }
   }
   /// 获取对应的图标

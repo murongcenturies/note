@@ -19,6 +19,8 @@ dependencies:
   shared_preferences: ^2.2.2
   #rain效果
   parallax_rain: ^1.1.1
+  #svg
+  flutter_svg: ^2.0.10+1
   #图标包
   eva_icons_flutter: ^3.1.0
   #主题色
@@ -88,7 +90,8 @@ flutter:
     #    - assets/RiveAssets/
     #    - assets/language/
     - assets/fonts/
-#    - assets/emotion/
+    - assets/emotion/
+    - assets/country/
   fonts:
     - family: Roboto
       fonts:

@@ -5,7 +5,7 @@ import '../../../../../core/core.dart';
 
 // 笔记页面的 “置顶” 按钮
 class IconPinnedStatus extends StatelessWidget {
-  // ignore: use_super_parameters, prefer_const_constructors_in_immutables
+  // ignore: prefer_const_constructors_in_immutables, use_super_parameters
   IconPinnedStatus({Key? key}) : super(key: key);
 
   @override
@@ -16,9 +16,13 @@ class IconPinnedStatus extends StatelessWidget {
 
         return IconButton(
           icon: Icon(iconCurrentStatus(currentStatus)),
+          color: Theme.of(context).iconTheme.color,
           onPressed: () {
             _onTogglePinnedStatus(currentStatus);
           },
+          tooltip: currentStatus == StatusNote.pinned
+              ? I18nContent.unpinNote.tr
+              : I18nContent.pinNote.tr,
         );
       },
     );
@@ -34,5 +38,6 @@ class IconPinnedStatus extends StatelessWidget {
 
   void _onTogglePinnedStatus(StatusNote currentStatus) {
     Get.find<StatusIconsController>().toggleIconPinnedStatus(currentStatus);
+    // print(currentStatus);
   }
 }

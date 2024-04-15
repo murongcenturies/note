@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 // 导入 core 库
 import '../../core.dart';
 
@@ -50,37 +49,50 @@ class AppAlerts {
 
   // 显示撤销移动笔记的弹窗，并提供撤销操作
   static void displaySnackarUndoMove(BuildContext context, String message) {
-    _displaySnackBar(
-      context,
-      message,
-      'Undo', // 操作按钮文字
-      () {
-        Get.find<NoteController>(tag: 'home').undoMoveNote();
-      }
-    );
+    _displaySnackBar(context, message, I18nContent.undo.tr, // 操作按钮文字
+        () {
+      // 使用 GetX 获取 DrawerNavigationController
+      final DrawerNavigationController drawerController =
+          Get.find<DrawerNavigationController>();
+      // 获取当前选中的视图
+      final selectedView = drawerController
+          .convertToDrawerSectionView(drawerController.selectedNavItem.value);
+      // 获取视图名称
+      String name = selectedView.toString().split('.').last;
+      // print(name);
+      //通知更新笔记状态
+      Get.find<NoteController>(tag: name).undoMoveNote();
+    });
   }
 
   // 显示回收站弹窗
   static void displaySnackarRecycle(BuildContext context, String message) {
-    // _displaySnackBar(
-    //   context,
-    //   message,
-    //   'Recycle', // 操作按钮文字
-    //   () {
-    //     // 获取当前笔记状态
-    //     final noteStatusState = context.read<StatusIconsCubit>().state;
-    //
-    //     // 如果处于只读状态
-    //     if (noteStatusState is ReadOnlyState) {
-    //       final currentNote = noteStatusState.currentNote;
-    //
-    //       // 将笔记移动到未定义状态 (相当于回收站)
-    //       context
-    //           .read<NoteBloc>()
-    //           .add(MoveNote(currentNote, StatusNote.undefined));
-    //     }
-    //   },
-    // );
+    _displaySnackBar(
+      context,
+      message,
+      I18nContent.recycle.tr, // 操作按钮文字
+      () {
+        // 获取当前笔记状态
+        final currentNoteStatus =
+            Get.find<StatusIconsController>().currentNoteStatus.value;
+
+        // 如果处于只读状态
+        if (currentNoteStatus is ReadOnlyState) {
+          final currentNote = currentNoteStatus.currentNote;
+          // 使用 GetX 获取 DrawerNavigationController
+          final DrawerNavigationController drawerController =
+              Get.find<DrawerNavigationController>();
+          // 获取当前选中的视图
+          final selectedView = drawerController.convertToDrawerSectionView(
+              drawerController.selectedNavItem.value);
+          // 获取视图名称
+          String name = selectedView.toString().split('.').last;
+          // 将笔记移动到未定义状态 (相当于回收站)
+          Get.find<NoteController>(tag: name)
+              .moveNote(currentNote, StatusNote.undefined);
+        }
+      },
+    );
   }
 
   // 显示删除笔记确认对话框
@@ -90,35 +102,37 @@ class AppAlerts {
   ) async {
     // 取消按钮
     Widget cancelButton = TextButton(
-      child: const Text('NO'),
+      child: Text(I18nContent.no.tr),
       onPressed: () {
         // 关闭两个弹窗 (对话框和 SnackBar)
-        // context.pop();
-        // context.pop();
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
       },
     );
 
     // 删除按钮
     Widget deleteButton = TextButton(
-      child: const Text('YES'),
+      child: Text(I18nContent.yes.tr),
       onPressed: () {
         // 关闭两个弹窗 (对话框和 SnackBar)
-        // context.pop();
-        // context.pop();
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
 
         // 触发删除笔记事件
-        // context.read<NoteBloc>().add(DeleteNote(note.id));
+        Get.find<NoteController>(tag: 'trash').deleteNoteById(note.id);
 
         // 刷新笔记列表
-        // context.read<NoteBloc>().add(RefreshNotes(DrawerSelect.drawerSection));
+        Get.find<NoteController>(tag: 'trash').refreshNotes();
+        Get.find<NoteController>(tag: 'home').refreshNotes();
+        // Get.find<NoteController>(tag: 'archive').refreshNotes();
       },
     );
 
     // 构建 AlertDialog
     AlertDialog alert = AlertDialog(
-      // backgroundColor: ColorNote.getColor(context, note.colorIndex),
+      backgroundColor: Theme.of(context).colorScheme.background,
       // 背景色根据笔记颜色设置
-      content: const Text('Are you sure you want to delete this Note?'),
+      content:  Text(I18nContent.alert.tr, style: context.textTheme.bodyMedium),
       // 提示文本
       actions: [
         deleteButton,

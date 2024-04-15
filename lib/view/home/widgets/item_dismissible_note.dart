@@ -10,7 +10,7 @@ class ItemDismissibleNote extends StatelessWidget {
   const ItemDismissibleNote({
     super.key,
     required this.itemNote, // 笔记条目
-    required this.isShowDismiss, // 是否显示可滑动手势删除
+    required this.isShowDismiss, // 是否显示可滑动手势
   });
 
   final Note itemNote;

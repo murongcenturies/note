@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'widgets.dart';
+
 // 阻止滚动越界的滚动行为类 (私有类)
 class _ClampingScrollBehavior extends ScrollBehavior {
   @override
   // 始终使用 ClampingScrollPhysics 滚动物理特性，防止滚动越界
-  ScrollPhysics getScrollPhysics(BuildContext context) => const ClampingScrollPhysics();
+  ScrollPhysics getScrollPhysics(BuildContext context) =>
+      const ClampingScrollPhysics();
 }
 
 // 常用可刷新滚动组件
@@ -53,11 +55,12 @@ class CommonFixScrolling extends StatelessWidget {
                     // 将子组件水平居中对齐
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                       const Padding(
+                      Padding(
                         // 顶部内边距 (避免顶端搜索栏和其他组件重叠)
-                        padding: EdgeInsets.only(top: 15),
+                        padding: const EdgeInsets.only(top: 15),
                         child: CommonSearchBar(), // 搜索栏组件
                       ),
+
                       /// 填充可用空间，并具有固定高度为0的小部件。
                       const Expanded(child: SizedBox(height: 0)),
                       child, // 子组件

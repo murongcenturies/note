@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:note/view/home/widgets/widgets.dart';
@@ -14,11 +16,12 @@ class EmotionPage extends StatelessWidget {
   final DrawerNavigationController drawerController =
       Get.find<DrawerNavigationController>();
   final StatusIconsController noteStatue = Get.put(StatusIconsController());
+  final EmotionController emotionController = Get.put(EmotionController());
   late final NoteController _controller;
   EmotionPage({super.key}) {
     final selectedView = drawerController
         .convertToDrawerSectionView(drawerController.selectedNavItem.value);
-    print(selectedView);
+    // print(selectedView);
     // 获取视图名称
     String name = selectedView.toString().split('.').last;
     // 初始化 NoteController 并将其放入 GetX 管理
@@ -36,13 +39,22 @@ class EmotionPage extends StatelessWidget {
       // 显示 ParallaxRain 效果
       body: Stack(
         children: <Widget>[
-          // 添加背景图片的 SizedBox
-          const SizedBox.expand(
+          // 添加背景图片
+          Positioned.fill(
             child: DecoratedBox(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(AppIcons.cloud), // 背景图片路径
                   fit: BoxFit.fill, // 适应方式，可以根据需求调整
+                ),
+              ),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 0, sigmaY: 0),
+                child: Container(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .background
+                      .withOpacity(0.5), // 使用主题背景颜色
                 ),
               ),
             ),
@@ -53,7 +65,7 @@ class EmotionPage extends StatelessWidget {
             displayNotesMsg(state);
             // print(state);
             if (state is LoadingState) {
-              print(state);
+              // print(state);
               return CommonLoadingNotes(state.drawerSectionView);
             } else if (state is EmptyNoteState) {
               return CommonEmptyNotes(state.drawerSectionView);
@@ -100,6 +112,7 @@ class EmotionPage extends StatelessWidget {
     Future.delayed(Duration.zero, () {
       // 更新图标状态
       noteStatue.toggleIconsStatus(note);
+      emotionController.toggleEmotionIconsStatus(note, note.emotion);
     });
 
     // 导航到笔记详情页面
@@ -109,6 +122,12 @@ class EmotionPage extends StatelessWidget {
 // 导航到笔记详情页面
   void _navigateToNoteDetail(Note note) async {
     await Future.delayed(Duration.zero);
-    Get.toNamed(AppRouterName.note.path, arguments: note);
+    Get.toNamed(
+      AppRouterName.note.path,
+      arguments: {
+        'note': note,
+        'noteController': _controller,
+      },
+    );
   }
 }

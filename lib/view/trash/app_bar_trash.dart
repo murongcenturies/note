@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:note/core/core.dart';
 
 // 回收站应用栏
 class AppBarTrash extends StatelessWidget implements PreferredSizeWidget {
@@ -8,7 +10,7 @@ class AppBarTrash extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       // 标题： “回收站”
-      title: const Text('Trash'),
+      title: Text(I18nContent.trash.tr),
     );
   }
 

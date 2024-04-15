@@ -17,8 +17,13 @@ class AppRouter {
     GetPage(
       name: AppRouterName.note.path,
       page: () {
-        final note = Get.arguments as Note;
-        return NotePage(note: note);
+        final arguments = Get.arguments as Map<String, Object>;
+        final note = arguments['note'] as Note;
+        final noteController = arguments['noteController'] as NoteController;
+        return NotePage(
+          note: note,
+          noteController: noteController,
+        );
       },
     ),
     GetPage(
@@ -33,7 +38,7 @@ class AppRouter {
       name: AppRouterName.archive.path,
       page: () => ArchivePage(),
     ),
-        GetPage(
+    GetPage(
       name: AppRouterName.emotion.path,
       page: () => EmotionPage(),
     ),

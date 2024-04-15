@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:get/get.dart';
+import 'package:note/core/core.dart';
 
 class AnimatedTextWidget extends StatelessWidget {
   const AnimatedTextWidget({super.key});
@@ -23,7 +25,7 @@ class AnimatedTextWidget extends StatelessWidget {
       pause: Duration.zero, // 消除延迟
       animatedTexts: [
         ColorizeAnimatedText(
-          'Welcome Back!',
+          I18nContent.welcome.tr,
           textStyle: TextStyle(fontSize: getTextSize(context)),
           colors: [
             const Color(0xFFD8E7CB),
@@ -36,7 +38,7 @@ class AnimatedTextWidget extends StatelessWidget {
           speed: const Duration(milliseconds: 400),
         ),
         ColorizeAnimatedText(
-          'Every idea deserves to be written down!',
+          I18nContent.colorText.tr,
           textStyle:
               TextStyle(fontSize: getTextSize(context) * 0.6), // 使用比例调整第二个文本的大小
           colors: [
